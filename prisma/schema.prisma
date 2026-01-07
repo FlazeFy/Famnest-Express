@@ -25,6 +25,10 @@ model dictionary {
   dictionary_type String   @db.Char(36)
   dictionary_desc String?  @db.VarChar(255)
   created_at      DateTime @default(now()) @db.Timestamptz(6)
+
+  // Relations
+  family_members family_member[]
+  events         event[]
 }
 
 model user {
@@ -41,11 +45,16 @@ model user {
   deleted_at    DateTime? @db.Timestamptz(6)
 
   // Relations
-  histories history[]
-  allergics allergic[]
-  hobbies   hobby[]
-  tasks     task[]
-  families  family[]
+  histories             history[]
+  allergics             allergic[]
+  hobbies               hobby[]
+  tasks                 task[]
+  families              family[]
+  google_tokens         google_token[]
+  schedules             schedule[]
+  events                event[]
+  task_assigns_created  task_assign[] @relation("TaskAssignCreator")
+  task_assigns_assigned task_assign[] @relation("TaskAssignAssignee")
 }
 
 model family {
@@ -61,7 +70,10 @@ model family {
   user user @relation(fields: [created_by], references: [id])
 
   // Relations
-  tasks task[]
+  tasks          task[]
+  family_members family_member[]
+  schedules      schedule[]
+  events         event[]
 }
 
 model history {
@@ -113,4 +125,79 @@ model task {
   // Relations
   family family @relation(fields: [family_id], references: [id])
   user   user   @relation(fields: [created_by], references: [id])
+
+  task_assigns task_assign[]
+}
+
+model task_assign {
+  id          String   @id @db.Char(36)
+  task_id     String   @db.Char(36)
+  assign_desc String?  @db.VarChar(144)
+  assign_to   String   @db.Char(36)
+  created_by  String   @db.Char(36)
+  created_at  DateTime @default(now()) @db.Timestamptz(6)
+  updated_at  DateTime @updatedAt @db.Timestamptz(6)
+
+  // Relations
+  task     task @relation(fields: [task_id], references: [id])
+  creator  user @relation("TaskAssignCreator", fields: [created_by], references: [id])
+  assignee user @relation("TaskAssignAssignee", fields: [assign_to], references: [id])
+}
+
+model google_token {
+  id            String   @id @db.Char(36)
+  access_token  String   @db.Text
+  refresh_token String   @db.Text
+  expiry        DateTime @db.Timestamptz(6)
+  created_by    String   @db.Char(36)
+
+  // Relation to User
+  user user @relation(fields: [created_by], references: [id])
+}
+
+model schedule {
+  id             String   @id @db.Char(36)
+  family_id      String   @db.Char(36)
+  created_by     String   @db.Char(36)
+  schedule_title String   @db.VarChar(144)
+  schedule_desc  String?  @db.VarChar(500)
+  start_time     DateTime @db.Timestamptz(6)
+  end_time       DateTime @db.Timestamptz(6)
+  created_at     DateTime @default(now()) @db.Timestamptz(6)
+  updated_at     DateTime @updatedAt @db.Timestamptz(6)
+
+  // Relations
+  family family @relation(fields: [family_id], references: [id])
+  user   user   @relation(fields: [created_by], references: [id])
+}
+
+model event {
+  id                       String   @id @db.Char(36)
+  family_id                String   @db.Char(36)
+  google_calendar_event_id String?  @db.Char(36)
+  event_title              String   @db.VarChar(255)
+  event_desc               String?  @db.Text
+  event_category           String   @db.VarChar(75)
+  event_time               DateTime @db.Timestamptz(6)
+  created_by               String   @db.Char(36)
+  created_at               DateTime @default(now()) @db.Timestamptz(6)
+  updated_at               DateTime @updatedAt @db.Timestamptz(6)
+
+  // Relations
+  family     family     @relation(fields: [family_id], references: [id])
+  user       user       @relation(fields: [created_by], references: [id])
+  dictionary dictionary @relation(fields: [event_category], references: [dictionary_name])
+}
+
+model family_member {
+  id              String   @id @db.Char(36)
+  family_id       String   @db.Char(36)
+  family_relation String   @db.Char(36)
+  is_admin        Boolean  @default(false)
+  created_at      DateTime @default(now()) @db.Timestamptz(6)
+  updated_at      DateTime @updatedAt @db.Timestamptz(6)
+
+  // Relations
+  family     family     @relation(fields: [family_id], references: [id])
+  dictionary dictionary @relation(fields: [family_relation], references: [dictionary_name])
 }
