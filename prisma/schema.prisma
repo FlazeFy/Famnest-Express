@@ -1,0 +1,116 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum TaskStatus { 
+  pending 
+  in_progress 
+  completed 
+}
+
+model dictionary {
+  id              String   @id @db.Char(36)
+  dictionary_name String   @unique @db.Char(36)
+  dictionary_type String   @db.Char(36)
+  dictionary_desc String?  @db.VarChar(255)
+  created_at      DateTime @default(now()) @db.Timestamptz(6)
+}
+
+model user {
+  id            String    @id @db.Char(36)
+  username      String    @db.Char(36)
+  password      String    @db.Char(36)
+  email         String    @unique @db.VarChar(255)
+  fullname      String    @db.Char(36)
+  bio           String?   @db.VarChar(500)
+  profile_image String?   @db.VarChar(500)
+  born_at       DateTime? @db.Date
+  created_at    DateTime  @default(now()) @db.Timestamptz(6)
+  updated_at    DateTime  @updatedAt @db.Timestamptz(6)
+  deleted_at    DateTime? @db.Timestamptz(6)
+
+  // Relations
+  histories history[]
+  allergics allergic[]
+  hobbies   hobby[]
+  tasks     task[]
+  families  family[]
+}
+
+model family {
+  id          String    @id @db.Char(36)
+  family_name String    @db.VarChar(144)
+  family_desc String?   @db.Text
+  created_by  String    @db.Char(36)
+  created_at  DateTime  @default(now()) @db.Timestamptz(6)
+  updated_at  DateTime  @updatedAt @db.Timestamptz(6)
+  deleted_at  DateTime? @db.Timestamptz(6)
+
+  // Relation to User
+  user user @relation(fields: [created_by], references: [id])
+
+  // Relations
+  tasks task[]
+}
+
+model history {
+  id              String   @id @db.Char(36)
+  history_type    String   @unique @db.Char(36)
+  history_context String   @db.Char(36)
+  created_by      String?  @db.Char(36)
+  created_at      DateTime @default(now()) @db.Timestamptz(6)
+
+  // Relation to User
+  user user? @relation(fields: [created_by], references: [id])
+}
+
+model allergic {
+  id               String   @id @db.Char(36)
+  allergic_context String   @db.Char(36)
+  allergic_desc    String?  @db.VarChar(255)
+  created_by       String   @db.Char(36)
+  created_at       DateTime @default(now()) @db.Timestamptz(6)
+  updated_at       DateTime @updatedAt @db.Timestamptz(6)
+
+  // Relation to User
+  user user @relation(fields: [created_by], references: [id])
+}
+
+model hobby {
+  id            String   @id @db.Char(36)
+  hobby_context String   @db.Char(36)
+  hobby_desc    String?  @db.VarChar(255)
+  created_by    String   @db.Char(36)
+  created_at    DateTime @default(now()) @db.Timestamptz(6)
+  updated_at    DateTime @updatedAt @db.Timestamptz(6)
+
+  // Relation to User
+  user user @relation(fields: [created_by], references: [id])
+}
+
+model task {
+  id         String     @id @db.Char(36)
+  family_id  String     @db.Char(36)
+  task_title String     @db.VarChar(255)
+  task_desc  String?    @db.Text
+  status     TaskStatus @default(pending)
+  due_date   DateTime?  @db.Timestamptz(6)
+  created_by String     @db.Char(36)
+  created_at DateTime   @default(now()) @db.Timestamptz(6)
+  updated_at DateTime   @updatedAt @db.Timestamptz(6)
+
+  // Relations
+  family family @relation(fields: [family_id], references: [id])
+  user   user   @relation(fields: [created_by], references: [id])
+}
