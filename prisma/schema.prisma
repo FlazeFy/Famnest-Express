@@ -5,7 +5,7 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider = "prisma-client"
+  provider = "prisma-client-js"
   output   = "../src/generated/prisma"
 }
 
@@ -34,9 +34,9 @@ model dictionary {
 model user {
   id            String    @id @db.Char(36)
   username      String    @db.Char(36)
-  password      String    @db.Char(36)
+  password      String    @db.VarChar(500)
   email         String    @unique @db.VarChar(255)
-  fullname      String    @db.Char(36)
+  fullname      String    @db.Char(75)
   bio           String?   @db.VarChar(500)
   profile_image String?   @db.VarChar(500)
   born_at       DateTime? @db.Date
