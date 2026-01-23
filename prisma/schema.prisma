@@ -90,9 +90,9 @@ model feedback {
 
 model history {
   id              String   @id @db.Char(36)
-  history_type    String   @unique @db.Char(36)
+  history_type    String   @db.Char(36)
   history_context String   @db.Char(36)
-  created_by      String  @db.Char(36)
+  created_by      String   @db.Char(36)
   created_at      DateTime @default(now()) @db.Timestamptz(6)
 
   // Relation to User
