@@ -33,4 +33,22 @@ export class UserRepository {
             select: { id: true },
         })
     }
+
+    public findRandomUserFamily = async () => {
+        const count = await prisma.user.count({
+            where: { families: { some: {} } }
+        })
+    
+        if (count === 0) {
+          throw new Error("No available users with family")
+        }
+    
+        const skip = Math.floor(Math.random() * count)
+    
+        return prisma.user.findFirst({
+            skip,
+            where: { families: { some: {} } },
+            select: { id: true },
+        })
+    }
 }

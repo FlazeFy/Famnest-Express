@@ -7,6 +7,7 @@ import HistoryFactory from "./factories/history.factory"
 import DictionaryFactory from "./factories/dictionary.factory"
 import AllergicFactory from "./factories/allergic.factory"
 import HobbyFactory from "./factories/hobby.factory"
+import TaskFactory from "./factories/task.factory"
 
 export const dictionaries = [
     // Event Categories
@@ -38,9 +39,11 @@ class Seeder {
     private dictionaryFactory = new DictionaryFactory()
     private allergicFactory = new AllergicFactory()
     private hobbyFactory = new HobbyFactory()
+    private taskFactory = new TaskFactory()
     private password = "nopass123"
 
     private clearAllTables = async () => {
+        await prisma.task.deleteMany()
         await prisma.family.deleteMany()
         await prisma.feedback.deleteMany()
         await prisma.history.deleteMany()
@@ -69,6 +72,7 @@ class Seeder {
             await this.historyFactory.createMany(500)
             await this.allergicFactory.createMany(150)
             await this.hobbyFactory.createMany(300)
+            await this.taskFactory.createMany(1200)
         } catch (err) {
             console.error(err)
         } finally {
