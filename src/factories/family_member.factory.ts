@@ -1,22 +1,25 @@
 import { faker } from "@faker-js/faker"
 import { prisma } from "../configs/prisma"
 import { DictionaryRepository } from "../repositories/dictionary.repository"
+import { FamilyRepository } from "../repositories/family.repository"
 import { UserRepository } from "../repositories/user.repository"
 
-class FamilyFactory {
-    private userRepository: UserRepository
+class FamilyMemberFactory {
+    private familyRepository: FamilyRepository
     private dictionaryRepository: DictionaryRepository
+    private userRepository: UserRepository
 
     constructor(){
+        this.familyRepository = new FamilyRepository()
+        this.dictionaryRepository = new DictionaryRepository()
         this.userRepository = new UserRepository()
-        this.dictionaryRepository = new DictionaryRepository
     }
 
     public create = async () => {
-        // Get random user with no family from repo
-        const user = await this.userRepository.findRandomUserNoFamily()
-        if (!user) {
-            throw new Error('Family requires an user')
+        // Get random family from repo
+        const family = await this.familyRepository.findRandomFamily()
+        if (!family) {
+            throw new Error('Family member requires a family')
         }
 
         const familyRelation = await this.dictionaryRepository.findRandomDictionaryByDictionaryType('family_relation')
@@ -24,21 +27,19 @@ class FamilyFactory {
             throw new Error('Family member requires a family relation')
         }
 
-        return prisma.family.create({
+        const user = await this.userRepository.findRandomUserNoFamily()
+        if (!user) {
+            throw new Error('Family member requires a user')
+        }
+
+        return prisma.family_member.create({
             data: {
                 id: faker.string.uuid(),
-                family_name: faker.person.lastName(),
-                family_desc: faker.lorem.sentences(3),
+                is_admin: faker.datatype.boolean(0.35),
                 created_at: faker.date.past({ years: 1 }),
                 user: { connect: { id: user?.id } },
-                family_members: {
-                    create: {
-                        id: faker.string.uuid(),
-                        is_admin: true,
-                        dictionary: { connect: { dictionary_name: familyRelation?.dictionary_name}},
-                        user: { connect: { id: user.id } },
-                    },
-                },
+                family: { connect: { id: family.id } },
+                dictionary: { connect: { dictionary_name: familyRelation?.dictionary_name}}
             },
         })
     }
@@ -50,4 +51,4 @@ class FamilyFactory {
     }
 }
 
-export default FamilyFactory
+export default FamilyMemberFactory
