@@ -5,7 +5,7 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider = "prisma-client-js"
+  provider = "prisma-client"
   output   = "../src/generated/prisma"
 }
 
@@ -53,6 +53,7 @@ model user {
   google_tokens         google_token[]
   schedules             schedule[]
   events                event[]
+  feedbacks             feedback[]
   task_assigns_created  task_assign[] @relation("TaskAssignCreator")
   task_assigns_assigned task_assign[] @relation("TaskAssignAssignee")
 }
@@ -76,15 +77,26 @@ model family {
   events         event[]
 }
 
+model feedback {
+  id            String   @id @db.Char(36)
+  feedback_rate Int
+  feedback_body String   @db.VarChar(255)
+  created_at    DateTime @db.Timestamp(6)
+  created_by    String   @db.Char(36)
+  
+  // Relation to User
+  user user @relation(fields: [created_by], references: [id])
+}
+
 model history {
   id              String   @id @db.Char(36)
   history_type    String   @unique @db.Char(36)
   history_context String   @db.Char(36)
-  created_by      String?  @db.Char(36)
+  created_by      String  @db.Char(36)
   created_at      DateTime @default(now()) @db.Timestamptz(6)
 
   // Relation to User
-  user user? @relation(fields: [created_by], references: [id])
+  user user @relation(fields: [created_by], references: [id])
 }
 
 model allergic {

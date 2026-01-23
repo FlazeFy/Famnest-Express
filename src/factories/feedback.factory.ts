@@ -2,7 +2,7 @@ import { faker } from "@faker-js/faker"
 import { prisma } from "../configs/prisma"
 import { UserRepository } from "../repositories/user.repository"
 
-class FamilyFactory {
+class FeedbackFactory {
     private userRepository: UserRepository
 
     constructor(){
@@ -10,19 +10,19 @@ class FamilyFactory {
     }
 
     public create = async () => {
-        // Get random user with no family from repo
-        const user = await this.userRepository.findRandomUserNoFamily()
+        // Get random user from repo
+        const user = await this.userRepository.findRandomUser()
         if (!user) {
-            throw new Error('Family requires an user')
+            throw new Error('Cannot create feedback without users')
         }
 
-        return prisma.family.create({
+        return prisma.feedback.create({
             data: {
                 id: faker.string.uuid(),
-                family_name: faker.person.lastName(),
-                family_desc: faker.lorem.sentences(3),
+                feedback_rate: faker.number.int({ min: 1, max: 5 }),
+                feedback_body: faker.lorem.sentence(),
                 created_at: faker.date.past({ years: 1 }),
-                user: { connect: { id: user?.id } }
+                user: { connect: { id: user.id } },
             },
         })
     }
@@ -34,4 +34,4 @@ class FamilyFactory {
     }
 }
 
-export default FamilyFactory
+export default FeedbackFactory
