@@ -55,7 +55,7 @@ class ScheduleFactory {
             data: {
                 id: faker.string.uuid(),
                 schedule_title: faker.word.words(2),
-                schedule_desc: faker.lorem.sentences(3),
+                schedule_desc: faker.datatype.boolean() ? faker.lorem.sentences(3) : null,
                 day: this.randomDayName(),
                 time_start: start,
                 time_end: end,

@@ -11,6 +11,7 @@ import TaskFactory from "./factories/task.factory"
 import FamilyMemberFactory from "./factories/family_member.factory"
 import TaskAssignFactory from "./factories/task_assign.factory"
 import ScheduleFactory from "./factories/schedule.factory"
+import EventFactory from "./factories/event.factory"
 
 export const dictionaries = [
     // Event Categories
@@ -62,9 +63,11 @@ class Seeder {
     private familyMemberFactory = new FamilyMemberFactory()
     private taskAsssignFactory = new TaskAssignFactory()
     private scheduleFactory = new ScheduleFactory()
+    private eventFactory = new EventFactory()
     private password = "nopass123"
 
     private clearAllTables = async () => {
+        await prisma.event.deleteMany()
         await prisma.schedule.deleteMany()
         await prisma.task_assign.deleteMany()
         await prisma.task.deleteMany()
@@ -101,6 +104,7 @@ class Seeder {
             await this.familyMemberFactory.createMany(80)
             await this.taskAsssignFactory.createMany(2600)
             await this.scheduleFactory.createMany(200)
+            await this.eventFactory.createMany(500)
         } catch (err) {
             console.error(err)
         } finally {
