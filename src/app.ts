@@ -3,6 +3,7 @@ dotenv.config()
 import express, { Application, NextFunction, Request, Response } from "express"
 import cors from "cors"
 import DictionaryRouter from "./routes/dictionary.router"
+import AuthRouter from "./routes/auth.router"
 
 const PORT = process.env.PORT
 
@@ -29,7 +30,9 @@ class App {
         })
 
         const dictionaryRouter = new DictionaryRouter()
+        const authRouter = new AuthRouter()
         this.app.use("/api/v1/dictionaries", dictionaryRouter.getRouter())
+        this.app.use("/api/v1/auths", authRouter.getRouter())
     }
 
     // Error handling

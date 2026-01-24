@@ -89,6 +89,18 @@ model family {
   events         event[]
 }
 
+model admin {
+  id                String    @id @db.Char(36)
+  username          String    @db.Char(36)
+  password          String    @db.VarChar(500)
+  email             String    @unique @db.VarChar(255)
+  telegram_user_id  String?   @unique @db.VarChar(10)
+  telegram_is_valid Boolean   @default(false)
+  // Metadata
+  created_at        DateTime  @default(now())
+  updated_at        DateTime  @updatedAt
+}
+
 model feedback {
   id            String   @id @db.Char(36)
   feedback_rate Int
