@@ -10,6 +10,7 @@ import HobbyFactory from "./factories/hobby.factory"
 import TaskFactory from "./factories/task.factory"
 import FamilyMemberFactory from "./factories/family_member.factory"
 import TaskAssignFactory from "./factories/task_assign.factory"
+import ScheduleFactory from "./factories/schedule.factory"
 
 export const dictionaries = [
     // Event Categories
@@ -19,6 +20,22 @@ export const dictionaries = [
     { dictionary_type: "event_category", dictionary_name: "holiday", dictionary_desc: "Public or family holiday" },
     { dictionary_type: "event_category", dictionary_name: "appointment", dictionary_desc: "Personal or family appointment" },
     { dictionary_type: "event_category", dictionary_name: "reminder", dictionary_desc: "General reminder" },
+    // Schedule Categories
+    { dictionary_type: "schedule_category", dictionary_name: "meal preparation", dictionary_desc: "Cooking or preparing meals" },
+    { dictionary_type: "schedule_category", dictionary_name: "family meal", dictionary_desc: "Breakfast, lunch, or dinner together" },
+    { dictionary_type: "schedule_category", dictionary_name: "school time", dictionary_desc: "School or study time for children" },
+    { dictionary_type: "schedule_category", dictionary_name: "homework assistance", dictionary_desc: "Helping children with homework" },
+    { dictionary_type: "schedule_category", dictionary_name: "work from home", dictionary_desc: "Remote or home-based work schedule" },
+    { dictionary_type: "schedule_category", dictionary_name: "house chores", dictionary_desc: "Cleaning, laundry, or household duties" },
+    { dictionary_type: "schedule_category", dictionary_name: "childcare", dictionary_desc: "Taking care of children or babies" },
+    { dictionary_type: "schedule_category", dictionary_name: "elder care", dictionary_desc: "Caring for elderly family members" },
+    { dictionary_type: "schedule_category", dictionary_name: "exercise", dictionary_desc: "Workout, jogging, or physical activity" },
+    { dictionary_type: "schedule_category", dictionary_name: "health check", dictionary_desc: "Medical or health-related routines" },
+    { dictionary_type: "schedule_category", dictionary_name: "religious activity", dictionary_desc: "Prayer, worship, or religious events" },
+    { dictionary_type: "schedule_category", dictionary_name: "family time", dictionary_desc: "Quality time with family members" },
+    { dictionary_type: "schedule_category", dictionary_name: "leisure", dictionary_desc: "Relaxing, watching TV, or hobbies" },
+    { dictionary_type: "schedule_category", dictionary_name: "shopping", dictionary_desc: "Grocery or household shopping" },
+    { dictionary_type: "schedule_category", dictionary_name: "transportation", dictionary_desc: "School drop-off, pickup, or commuting" },
     // Family Relations
     { dictionary_type: "family_relation", dictionary_name: "father", dictionary_desc: "Father" },
     { dictionary_type: "family_relation", dictionary_name: "mother", dictionary_desc: "Mother" },
@@ -44,9 +61,11 @@ class Seeder {
     private taskFactory = new TaskFactory()
     private familyMemberFactory = new FamilyMemberFactory()
     private taskAsssignFactory = new TaskAssignFactory()
+    private scheduleFactory = new ScheduleFactory()
     private password = "nopass123"
 
     private clearAllTables = async () => {
+        await prisma.schedule.deleteMany()
         await prisma.task_assign.deleteMany()
         await prisma.task.deleteMany()
         await prisma.family_member.deleteMany()
@@ -81,6 +100,7 @@ class Seeder {
             await this.taskFactory.createMany(1200)
             await this.familyMemberFactory.createMany(80)
             await this.taskAsssignFactory.createMany(2600)
+            await this.scheduleFactory.createMany(200)
         } catch (err) {
             console.error(err)
         } finally {

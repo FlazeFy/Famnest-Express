@@ -22,6 +22,7 @@ class FamilyMemberFactory {
             throw new Error('Family member requires a family')
         }
 
+        // Get random family relation from repo
         const familyRelation = await this.dictionaryRepository.findRandomDictionaryByDictionaryType('family_relation')
         if (!familyRelation) {
             throw new Error('Family member requires a family relation')
