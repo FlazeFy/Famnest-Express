@@ -9,6 +9,7 @@ import AllergicFactory from "./factories/allergic.factory"
 import HobbyFactory from "./factories/hobby.factory"
 import TaskFactory from "./factories/task.factory"
 import FamilyMemberFactory from "./factories/family_member.factory"
+import TaskAssignFactory from "./factories/task_assign.factory"
 
 export const dictionaries = [
     // Event Categories
@@ -42,9 +43,11 @@ class Seeder {
     private hobbyFactory = new HobbyFactory()
     private taskFactory = new TaskFactory()
     private familyMemberFactory = new FamilyMemberFactory()
+    private taskAsssignFactory = new TaskAssignFactory()
     private password = "nopass123"
 
     private clearAllTables = async () => {
+        await prisma.task_assign.deleteMany()
         await prisma.task.deleteMany()
         await prisma.family_member.deleteMany()
         await prisma.family.deleteMany()
@@ -77,6 +80,7 @@ class Seeder {
             await this.hobbyFactory.createMany(300)
             await this.taskFactory.createMany(1200)
             await this.familyMemberFactory.createMany(80)
+            await this.taskAsssignFactory.createMany(2600)
         } catch (err) {
             console.error(err)
         } finally {

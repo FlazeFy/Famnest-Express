@@ -40,7 +40,7 @@ export class UserRepository {
         })
     
         if (count === 0) {
-          throw new Error("No available users with family")
+            throw new Error("No available users with family")
         }
     
         const skip = Math.floor(Math.random() * count)
