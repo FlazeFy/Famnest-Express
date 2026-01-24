@@ -2,6 +2,7 @@ import dotenv from "dotenv"
 dotenv.config()
 import express, { Application, NextFunction, Request, Response } from "express"
 import cors from "cors"
+import DictionaryRouter from "./routes/dictionary.router"
 
 const PORT = process.env.PORT
 
@@ -26,6 +27,9 @@ class App {
         this.app.get("/", (req: Request, res: Response) => {
             res.status(200).send("<h1>Famnest API</h1>")
         })
+
+        const dictionaryRouter = new DictionaryRouter()
+        this.app.use("/api/v1/dictionaries", dictionaryRouter.getRouter())
     }
 
     // Error handling

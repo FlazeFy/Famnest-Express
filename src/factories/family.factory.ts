@@ -19,7 +19,7 @@ class FamilyFactory {
             throw new Error('Family requires an user')
         }
 
-        const familyRelation = await this.dictionaryRepository.findRandomDictionaryByDictionaryType('family_relation')
+        const familyRelation = await this.dictionaryRepository.findRandomDictionaryByDictionaryTypeRepo('family_relation')
         if (!familyRelation) {
             throw new Error('Family member requires a family relation')
         }

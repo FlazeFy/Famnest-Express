@@ -44,7 +44,7 @@ class ScheduleFactory {
         }
 
         // Get random schedule category from repo
-        const scheduleCategory = await this.dictionaryRepository.findRandomDictionaryByDictionaryType('schedule_category')
+        const scheduleCategory = await this.dictionaryRepository.findRandomDictionaryByDictionaryTypeRepo('schedule_category')
         if (!scheduleCategory) {
             throw new Error('Family member requires a family relation')
         }

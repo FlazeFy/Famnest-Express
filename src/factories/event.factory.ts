@@ -41,7 +41,7 @@ class EventFactory {
         }
 
         // Get random event category from repo
-        const eventCategory = await this.dictionaryRepository.findRandomDictionaryByDictionaryType('event_category')
+        const eventCategory = await this.dictionaryRepository.findRandomDictionaryByDictionaryTypeRepo('event_category')
         if (!eventCategory) {
             throw new Error('Family member requires a family relation')
         }
