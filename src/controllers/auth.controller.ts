@@ -1,4 +1,4 @@
-import { Request, Response } from "express"
+import { NextFunction, Request, Response } from "express"
 import { AuthService } from "../services/auth.service"
 
 export class AuthController {
@@ -8,7 +8,7 @@ export class AuthController {
         this.authService = new AuthService()
     }
 
-    public postLogin = async (req: Request, res: Response) => {
+    public postLogin = async (req: Request, res: Response, next: NextFunction) => {
         try {
             // Body
             const { email, password } = req.body
@@ -27,9 +27,7 @@ export class AuthController {
                 data: result,
             })
         } catch (error: any) {
-            return res.status(500).json({
-                message: "Something went wrong",
-            })
+            next(error)
         }
     }
 }

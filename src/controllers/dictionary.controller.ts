@@ -1,4 +1,4 @@
-import { Request, Response } from "express"
+import { NextFunction, Request, Response } from "express"
 import { DictionaryService } from "../services/dictionary.service"
 
 export class DictionaryController {
@@ -8,7 +8,7 @@ export class DictionaryController {
         this.dictionaryService = new DictionaryService()
     }
 
-    public getAllDictionary = async (req: Request, res: Response) => {
+    public getAllDictionary = async (req: Request, res: Response, next: NextFunction) => {
         try {
             // Query params
             const page = Number(req.query.page) || 1
@@ -31,9 +31,7 @@ export class DictionaryController {
                 },
             })
         } catch (error: any) {
-            return res.status(500).json({
-                message: "Something went wrong",
-            })
+            next(error)
         }
     }
 }

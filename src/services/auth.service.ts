@@ -3,7 +3,6 @@ import { createToken } from "../utils/token.util"
 import { AdminRepository } from "../repositories/admin.repository"
 import { UserRepository } from "../repositories/user.repository"
 
-
 export class AuthService {
     private adminRepo: AdminRepository
     private userRepo: UserRepository
