@@ -2,6 +2,7 @@ import { compare } from "bcrypt"
 import { createToken } from "../utils/token.util"
 import { AdminRepository } from "../repositories/admin.repository"
 import { UserRepository } from "../repositories/user.repository"
+import jwt from "jsonwebtoken"
 
 export class AuthService {
     private adminRepo: AdminRepository
@@ -47,6 +48,44 @@ export class AuthService {
             }
         }
     
+        return null
+    }
+
+    public refreshTokenService = async (refreshToken: string) => {
+        // Verify refresh token
+        const decoded = jwt.verify(refreshToken, process.env.SECRET || "secret")
+        if (typeof decoded === "string" || !("id" in decoded)) {
+            return null
+        }
+
+        const id = decoded.id
+
+        // Repo : Check admin first
+        const admin = await this.adminRepo.findAdminByIdRepo(id)
+        if (admin) {
+            // Generate auth token
+            const token = createToken({ id: id, role: "admin" }, "7d")
+            return {
+                name: admin.username,
+                email: admin.email,
+                role: "admin",
+                token,
+            }
+        }
+
+        // Repo : Check user if not admin
+        const user = await this.userRepo.findUserByIdRepo(id)
+        if (user) {
+            // Generate auth token
+            const token = createToken({ id: id, role: "user" }, "7d")
+            return {
+                name: user.username,
+                email: user.email,
+                role: "user",
+                token
+            }
+        }
+
         return null
     }
 }

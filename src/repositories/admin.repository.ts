@@ -6,4 +6,10 @@ export class AdminRepository {
             where: { email }
         })
     }
+
+    public findAdminByIdRepo = async (id: string) => {
+        return prisma.admin.findUnique({
+            where: { id }
+        })
+    }
 }
