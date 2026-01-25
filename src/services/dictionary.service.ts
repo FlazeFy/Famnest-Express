@@ -16,4 +16,17 @@ export class DictionaryService {
     
         return res
     }
+
+    public hardDeleteDictionaryByIdService = async (id: string) => {
+        // Repo : Check if dictionary exist
+        const dictionary = await this.dictionaryRepo.findDictionaryByIdRepo(id)
+        if (!dictionary) {
+            return null
+        }
+    
+        // Repo : Delete by id
+        await this.dictionaryRepo.deleteDictionaryByIdRepo(id)
+    
+        return dictionary
+    }
 }

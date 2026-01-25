@@ -16,3 +16,27 @@ export const verifyAuthToken = (req: Request, res: Response, next: NextFunction)
         next(error)
     }
 }
+
+export const authorizeRole = (roles: string[]) => {
+    return (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const user = res.locals.decript as { id: number; role: string };
+
+            if (!user) {
+                return res.status(401).json({
+                    message: "Unauthorized",
+                })
+            }
+
+            if (!roles.includes(user.role)) {
+                return res.status(403).json({
+                    message: "Your role is not authorized",
+                })
+            }
+
+            next()
+        } catch (error) {
+            res.status(500).send(error)
+        }
+    }
+}

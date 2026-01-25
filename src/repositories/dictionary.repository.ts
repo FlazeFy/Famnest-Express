@@ -35,5 +35,13 @@ export class DictionaryRepository {
             select: { dictionary_name: true }
         })
     }
+
+    public findDictionaryByIdRepo = async (id: string) => {
+        return prisma.dictionary.findUnique({ where: { id } })
+    }
+    
+    public deleteDictionaryByIdRepo = async (id: string) => {
+        return prisma.dictionary.delete({ where: { id } })
+    }
 }
   
