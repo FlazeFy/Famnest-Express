@@ -15,10 +15,11 @@ export default class AuthRouter {
     }
 
     private initializeRoute = () => {
-        const { postLogin, getRefreshToken } = this.authController
+        const { postLogin, getRefreshToken, getMyProfile } = this.authController
 
         this.route.post("/login", validateBodyMiddleware(authSchema), postLogin)
         this.route.get("/refresh", verifyAuthToken, getRefreshToken)
+        this.route.get("/profile", verifyAuthToken, getMyProfile)
     }
 
     public getRouter = (): Router => {
