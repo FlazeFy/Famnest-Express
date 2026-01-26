@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express"
 import { HistoryService } from "../services/history.service"
 import { extractUserFromAuthHeader } from "../utils/auth.util"
+import { validate as isUuid } from "uuid"
 
 export class HistoryController {
     private historyService: HistoryService
@@ -33,6 +34,39 @@ export class HistoryController {
                 meta: {
                     page, limit, total: result.total, total_page: Math.ceil(result.total / limit),
                 },
+            })
+        } catch (error: any) {
+            next(error)
+        }
+    }
+
+    public hardDeleteHistoryById = async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            // Param
+            const { id } = req.params
+
+            // Validate : UUID
+            if (!isUuid(id)) {
+                return res.status(400).json({
+                    message: "Invalid UUID format",
+                })
+            }
+    
+            // Get user id
+            const { userId } = extractUserFromAuthHeader(req.headers.authorization)
+    
+            // Service : Hard delete history by id
+            const result = await this.historyService.hardDeleteHistoryByIdService(id as string, userId)
+            if (!result) {
+                return res.status(404).json({
+                    message: "History not found"
+                })
+            }
+    
+            // Success response
+            res.status(200).json({
+                message: "Delete history successful",
+                data: result,
             })
         } catch (error: any) {
             next(error)

@@ -20,5 +20,17 @@ export class HistoryRepository {
     
         return { data, total }
     }
+
+    public hardDeleteHistoryByIdRepo = async (id: string, created_by: string | null) => {
+        return prisma.history.deleteMany({
+            where: { id, ...(created_by !== null && { created_by })},
+        })
+    }
+
+    public findHistoryByIdRepo = async (id: string) => {
+        return prisma.history.findUnique({
+            where: { id },
+        })
+    }
 }
   
