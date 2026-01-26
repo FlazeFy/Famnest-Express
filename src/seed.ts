@@ -12,6 +12,7 @@ import FamilyMemberFactory from "./factories/family_member.factory"
 import TaskAssignFactory from "./factories/task_assign.factory"
 import ScheduleFactory from "./factories/schedule.factory"
 import EventFactory from "./factories/event.factory"
+import AdminFactory from "./factories/admin.factory"
 
 export const dictionaries = [
     // Event Categories
@@ -52,6 +53,7 @@ export const dictionaries = [
 ]
 
 class Seeder {
+    private adminFactory = new AdminFactory()
     private userFactory = new UserFactory()
     private familyFactory = new FamilyFactory()
     private feedbackFactory = new FeedbackFactory()
@@ -78,6 +80,7 @@ class Seeder {
         await prisma.allergic.deleteMany()
         await prisma.hobby.deleteMany()
         await prisma.user.deleteMany()
+        await prisma.admin.deleteMany()
         await prisma.dictionary.deleteMany()
     }
 
@@ -94,6 +97,7 @@ class Seeder {
 
             // Run the seeder
             await this.seedDictionary()
+            await this.adminFactory.createMany(5, this.password)
             await this.userFactory.createMany(120, this.password)
             await this.familyFactory.createMany(30)
             await this.feedbackFactory.createMany(50)
