@@ -4,6 +4,7 @@ import express, { Application, NextFunction, Request, Response } from "express"
 import cors from "cors"
 import DictionaryRouter from "./routes/dictionary.router"
 import AuthRouter from "./routes/auth.router"
+import AllergicRouter from "./routes/allergic.router"
 
 const PORT = process.env.PORT
 
@@ -30,9 +31,11 @@ class App {
         })
 
         const dictionaryRouter = new DictionaryRouter()
+        const allergicRouter = new AllergicRouter()
         const authRouter = new AuthRouter()
         this.app.use("/api/v1/dictionaries", dictionaryRouter.getRouter())
         this.app.use("/api/v1/auths", authRouter.getRouter())
+        this.app.use("/api/v1/allergics", allergicRouter.getRouter())
     }
 
     // Error handling
