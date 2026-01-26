@@ -13,9 +13,10 @@ export default class AllergicRouter {
     }
 
     private initializeRoute = () => {
-        const { getAllAllergic } = this.allergicController
+        const { getAllAllergicController, hardDeleteAllergicByIdController } = this.allergicController
 
-        this.route.get("/", getAllAllergic)
+        this.route.get("/", verifyAuthToken, authorizeRole(["admin","user"]), getAllAllergicController)
+        this.route.delete("/:id", verifyAuthToken, authorizeRole(["admin","user"]), hardDeleteAllergicByIdController)
     }
 
     public getRouter = (): Router => {

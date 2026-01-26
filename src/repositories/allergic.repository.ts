@@ -19,5 +19,17 @@ export class AllergicRepository {
 
         return {data, total}
     }
+
+    public findAllergicByIdRepo = async (id: string, userId: string | null) => {
+        return prisma.allergic.findFirst({
+            where: { id, ...(userId ? { created_by: userId } : {}) }
+        })
+    }
+      
+    public deleteAllergicByIdRepo = async (id: string, userId: string | null) => {
+        return prisma.allergic.deleteMany({
+            where: { id, ...(userId ? { created_by: userId } : {}) }
+        })
+    }
 }
   

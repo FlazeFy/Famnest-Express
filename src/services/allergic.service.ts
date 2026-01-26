@@ -16,4 +16,17 @@ export class AllergicService {
     
         return res
     }
+
+    public hardDeleteAllergicByIdService = async (id: string, userId: string | null) => {
+        // Repo : Check if allergic exist
+        const allergic = await this.allergicRepo.findAllergicByIdRepo(id, userId)
+        if (!allergic) {
+            return null
+        }
+    
+        // Repo : Delete by id
+        await this.allergicRepo.deleteAllergicByIdRepo(id, userId)
+    
+        return allergic
+    }
 }

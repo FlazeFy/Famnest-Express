@@ -10,7 +10,7 @@ export class AllergicController {
         this.allergicService = new AllergicService()
     }
 
-    public getAllAllergic = async (req: Request, res: Response, next: NextFunction) => {
+    public getAllAllergicController = async (req: Request, res: Response, next: NextFunction) => {
         try {
             // Query params
             const page = Number(req.query.page) || 1
@@ -34,6 +34,39 @@ export class AllergicController {
                 meta: {
                     page, limit, total: result.total, total_page: Math.ceil(result.total / limit),
                 },
+            })
+        } catch (error: any) {
+            next(error)
+        }
+    }
+
+    public hardDeleteAllergicByIdController = async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            // Param
+            const id = req.params.id as string
+
+            // Validate : UUID
+            if (!isUuid(id)) {
+                return res.status(400).json({
+                    message: "Invalid UUID format",
+                })
+            }
+
+            // Get user id
+            const { userId, role } = extractUserFromAuthHeader(req.headers.authorization)
+    
+            // Service : Hard delete allergic by id
+            const result = await this.allergicService.hardDeleteAllergicByIdService(id, role === "user" ? userId : null)
+            if (!result) {
+                return res.status(404).json({
+                    message: "Allergic not found"
+                })
+            }
+    
+            // Success response
+            res.status(200).json({
+                message: "Delete allergic successful",
+                data: result,
             })
         } catch (error: any) {
             next(error)
