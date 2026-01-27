@@ -10,7 +10,7 @@ export class UserRepository {
     
         const skip = Math.floor(Math.random() * count)
     
-        return prisma.user.findFirst({ skip, select: { id: true }})
+        return prisma.user.findFirst({ skip, select: { id: true, email: true }})
     }
 
     public findRandomUserNoFamily = async () => {

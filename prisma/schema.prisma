@@ -112,6 +112,15 @@ model feedback {
   user user @relation(fields: [created_by], references: [id])
 }
 
+model question {
+  id            String   @id @db.Char(36)
+  question      String   @db.VarChar(255)
+  answer        String?  @db.VarChar(500)
+  is_show       Boolean  @default(false)
+  created_at    DateTime @db.Timestamp(6)
+  email         String   @db.VarChar(255)
+}
+
 model history {
   id              String   @id @db.Char(36)
   history_type    String   @db.Char(36)
