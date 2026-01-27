@@ -13,19 +13,13 @@ export const hashPassword = async (password: string) => {
 }
 
 export const extractUserFromAuthHeader = (authHeader?: string) => {
-    if (!authHeader) {
-        throw new Error("Authorization header missing")
-    }
+    if (!authHeader) throw new Error("Authorization header missing")
 
     const token = authHeader.split(" ")[1]
-    if (!token) {
-        throw new Error("Token missing")
-    }
+    if (!token) throw new Error("Token missing")
 
     const decoded = jwt.verify(token,process.env.SECRET || "secret")
-    if (typeof decoded === "string" || !("id" in decoded)) {
-        throw new Error("Invalid token payload")
-    }
+    if (typeof decoded === "string" || !("id" in decoded)) throw new Error("Invalid token payload")
 
     const payload = decoded as JwtPayload
     return {

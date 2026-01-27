@@ -10,9 +10,7 @@ export class FeedbackService {
     public getAllFeedbackService = async (page: number, limit: number, role: String) => {
         // Repo : Find all feedback
         const res = await this.feedbackRepo.findAllFeedbackRepo(page, limit, role)
-        if (!res || res.data.length === 0) {
-            return null
-        }
+        if (!res || res.data.length === 0) return null
     
         return res
     }
@@ -20,9 +18,7 @@ export class FeedbackService {
     public getRandomFeedbackService = async (limit: number) => {
         // Repo : Find random feedback
         const res = await this.feedbackRepo.findRandomFeedbackRepo(limit)
-        if (!res || res.length === 0) {
-            return null
-        }
+        if (!res || res.length === 0) return null
     
         return res
     }

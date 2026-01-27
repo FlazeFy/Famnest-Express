@@ -39,15 +39,11 @@ class ScheduleFactory {
     public create = async () => {
         // Get random family from repo
         const family = await this.familyRepository.findRandomFamily()
-        if (!family) {
-            throw new Error('Schedule requires a family')
-        }
+        if (!family) throw new Error('Schedule requires a family')
 
         // Get random schedule category from repo
         const scheduleCategory = await this.dictionaryRepository.findRandomDictionaryByDictionaryTypeRepo('schedule_category')
-        if (!scheduleCategory) {
-            throw new Error('Family member requires a family relation')
-        }
+        if (!scheduleCategory) throw new Error('Family member requires a family relation')
 
         const { start, end } = this.randomTimeRange()
 

@@ -12,9 +12,7 @@ export class QuestionService {
     public postQuestionService = async (question: string, email: string) => {
         // Repo : Create question
         const res = await this.questionRepo.createQuestionRepo(question, email)
-        if (!res) {
-            return null
-        }
+        if (!res) return null
 
         // Broadcast email
         await sendEmail(
@@ -24,15 +22,14 @@ export class QuestionService {
                 `Your question about "${res.question}" has been received by our team. We will notify you as soon as an answer is available. <br>Thank you for your patience.`
             )
         )
+        
         return res
     }
 
     public getRandomAnsweredQuestionService = async (limit: number) => {
         // Repo : Find random question
         const res = await this.questionRepo.findRandomQuestionRepo(limit, true)
-        if (!res || res.length === 0) {
-            return null
-        }
+        if (!res || res.length === 0) return null
     
         return res
     }

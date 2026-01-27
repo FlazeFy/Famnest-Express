@@ -3,10 +3,7 @@ import { prisma } from '../configs/prisma'
 export class UserRepository {
     public findRandomUser = async () => {
         const count = await prisma.user.count()
-    
-        if (count === 0) {
-            throw new Error('No users found. Seed users first')
-        }
+        if (count === 0) throw new Error('No users found. Seed users first')
     
         const skip = Math.floor(Math.random() * count)
     
@@ -20,11 +17,10 @@ export class UserRepository {
             },
         })
     
-        if (usersWithoutFamilyCount === 0) {
-            throw new Error("No available users without family")
-        }
+        if (usersWithoutFamilyCount === 0) throw new Error("No available users without family")
     
         const skip = Math.floor(Math.random() * usersWithoutFamilyCount)
+
         return prisma.user.findFirst({
             skip,
             where: {
@@ -38,10 +34,7 @@ export class UserRepository {
         const count = await prisma.user.count({
             where: { families: { some: {} } }
         })
-    
-        if (count === 0) {
-            throw new Error("No available users with family")
-        }
+        if (count === 0) throw new Error("No available users with family")
     
         const skip = Math.floor(Math.random() * count)
     

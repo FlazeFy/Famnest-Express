@@ -15,15 +15,15 @@ class QuestionFactory {
         if (faker.datatype.boolean()){
             // Get random user from repo
             const user = await this.userRepository.findRandomUser()
-            if (!user) {
-                throw new Error('Cannot create question without users')
-            }
+            if (!user) throw new Error('Cannot create question without users')
+
             email = user.email
         } else {
             email = faker.internet.email().toLowerCase()
         }
 
         const isShow = faker.datatype.boolean()
+        
         return prisma.question.create({
             data: {
                 id: faker.string.uuid(),

@@ -12,9 +12,7 @@ class FeedbackFactory {
     public create = async () => {
         // Get random user from repo
         const user = await this.userRepository.findRandomUser()
-        if (!user) {
-            throw new Error('Cannot create feedback without users')
-        }
+        if (!user) throw new Error('Cannot create feedback without users')
 
         return prisma.feedback.create({
             data: {

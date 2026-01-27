@@ -9,11 +9,6 @@ export class UserService {
 
     public getUserByIdService = async (id: string) => {
         // Repo : Find user by id
-        const res = await this.userRepo.findUserByIdRepo(id)
-        if (!res) {
-            return null
-        }
-
-        return res
+        return await this.userRepo.findUserByIdRepo(id)
     }
 }

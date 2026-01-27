@@ -36,15 +36,11 @@ class EventFactory {
     public create = async () => {
         // Get random family from repo
         const family = await this.familyRepository.findRandomFamily()
-        if (!family) {
-            throw new Error('Event requires a family')
-        }
+        if (!family) throw new Error('Event requires a family')
 
         // Get random event category from repo
         const eventCategory = await this.dictionaryRepository.findRandomDictionaryByDictionaryTypeRepo('event_category')
-        if (!eventCategory) {
-            throw new Error('Family member requires a family relation')
-        }
+        if (!eventCategory) throw new Error('Family member requires a family relation')
 
         const { start, end } = this.randomTimeRange()
 

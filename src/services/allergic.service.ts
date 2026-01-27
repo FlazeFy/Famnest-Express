@@ -10,9 +10,7 @@ export class AllergicService {
     public getAllAllergicService = async (page: number, limit: number, userId: string | null) => {
         // Repo : Find all allergic
         const res = await this.allergicRepo.findAllAllergicRepo(page, limit, userId)
-        if (!res || res.data.length === 0) {
-            return null
-        }
+        if (!res || res.data.length === 0) return null
     
         return res
     }
@@ -20,9 +18,7 @@ export class AllergicService {
     public hardDeleteAllergicByIdService = async (id: string, userId: string | null) => {
         // Repo : Check if allergic exist
         const allergic = await this.allergicRepo.findAllergicByIdRepo(id, userId)
-        if (!allergic) {
-            return null
-        }
+        if (!allergic) return null
     
         // Repo : Delete by id
         await this.allergicRepo.deleteAllergicByIdRepo(id, userId)

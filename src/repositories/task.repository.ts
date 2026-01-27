@@ -4,16 +4,12 @@ export class TaskRepository {
     public findRandomTaskHasFamilyMember = async () => {
         const whereClause = {
             family: {
-                family_members: {
-                    some: {},
-                },
+                family_members: { some: {} },
             },
         }
       
         const count = await prisma.task.count({ where: whereClause })
-        if (count === 0) {
-            throw new Error("No task found with at least one family member")
-        }
+        if (count === 0) throw new Error("No task found with at least one family member")
       
         const skip = Math.floor(Math.random() * count)
     
