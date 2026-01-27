@@ -13,9 +13,10 @@ export default class FeedbackRouter {
     }
 
     private initializeRoute = () => {
-        const { getAllFeedbackController } = this.feedbackController
+        const { getAllFeedbackController, getRandomFeedbackController } = this.feedbackController
 
         this.route.get("/", verifyAuthToken, authorizeRole(["admin","user"]), getAllFeedbackController)
+        this.route.get("/random", getRandomFeedbackController)
     }
 
     public getRouter = (): Router => {

@@ -43,4 +43,27 @@ export class FeedbackController {
             next(error)
         }
     }
+
+    public getRandomFeedbackController = async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            // Query params
+            const limit = Number(req.query.limit) || 3
+    
+            // Service : Get random feedback
+            const result = await this.feedbackService.getRandomFeedbackService(limit)
+            if (!result) {
+                return res.status(404).json({
+                    message: "Feedback not found"
+                })
+            }
+    
+            // Success response
+            res.status(200).json({
+                message: "Get feedback successful",
+                data: result,
+            })
+        } catch (error: any) {
+            next(error)
+        }
+    }
 }

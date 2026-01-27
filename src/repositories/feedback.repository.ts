@@ -23,5 +23,23 @@ export class FeedbackRepository {
 
         return {data, total}
     }
+
+    public findRandomFeedbackRepo = async (limit: number) => {
+        const total = await prisma.feedback.count()
+        const skip = total > limit ? Math.floor(Math.random() * (total - limit)) : 0
+
+        const data = await prisma.feedback.findMany({
+            skip,
+            take: limit,
+            select: {
+                feedback_body: true, feedback_rate: true,
+                user: {
+                    select: { username: true },
+                },
+            },
+        })
+
+        return data
+    }
 }
   

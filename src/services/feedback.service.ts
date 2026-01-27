@@ -16,4 +16,14 @@ export class FeedbackService {
     
         return res
     }
+
+    public getRandomFeedbackService = async (limit: number) => {
+        // Repo : Find random feedback
+        const res = await this.feedbackRepo.findRandomFeedbackRepo(limit)
+        if (!res || res.length === 0) {
+            return null
+        }
+    
+        return res
+    }
 }
