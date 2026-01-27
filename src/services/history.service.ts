@@ -17,9 +17,9 @@ export class HistoryService {
         return res
     }
 
-    public hardDeleteHistoryByIdService = async (id: string, created_by: string | null) => {
+    public hardDeleteHistoryByIdService = async (id: string, created_by: string) => {
         // Repo : Find history by id
-        const history = await this.historyRepo.findHistoryByIdRepo(id)
+        const history = await this.historyRepo.findHistoryByIdRepo(id, created_by)
         if (!history) {
             return null
         }
