@@ -26,4 +26,14 @@ export class QuestionService {
         )
         return res
     }
+
+    public getRandomAnsweredQuestionService = async (limit: number) => {
+        // Repo : Find random question
+        const res = await this.questionRepo.findRandomQuestionRepo(limit, true)
+        if (!res || res.length === 0) {
+            return null
+        }
+    
+        return res
+    }
 }

@@ -14,9 +14,10 @@ export default class QuestionRouter {
     }
 
     private initializeRoute = () => {
-        const { postQuestionController } = this.questionController
+        const { postQuestionController, getRandomAnsweredQuestionController } = this.questionController
 
         this.route.post("/", validateBodyMiddleware(questionSchema), postQuestionController)
+        this.route.get("/random", getRandomAnsweredQuestionController)
     }
 
     public getRouter = (): Router => {

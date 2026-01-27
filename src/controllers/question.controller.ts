@@ -29,4 +29,27 @@ export class QuestionController {
             next(error)
         }
     }
+
+    public getRandomAnsweredQuestionController = async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            // Query params
+            const limit = Number(req.query.limit) || 3
+    
+            // Service : Get random answered question
+            const result = await this.questionService.getRandomAnsweredQuestionService(limit)
+            if (!result) {
+                return res.status(404).json({
+                    message: "Question not found"
+                })
+            }
+    
+            // Success response
+            res.status(200).json({
+                message: "Get question successful",
+                data: result,
+            })
+        } catch (error: any) {
+            next(error)
+        }
+    }
 }

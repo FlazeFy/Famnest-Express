@@ -9,4 +9,21 @@ export class QuestionRepository {
             },
         })
     }
+
+    public findRandomQuestionRepo = async (limit: number, isAnswered: boolean) => {
+        const whereClause = { answer: isAnswered ? { not: null } : null }
+        const total = await prisma.question.count({ where: whereClause })
+        const skip = total > limit ? Math.floor(Math.random() * (total - limit)) : 0
+
+        const data = await prisma.question.findMany({
+            skip,
+            take: limit,
+            select: {
+                question: true, answer: isAnswered ? true : false, email: isAnswered ? false : true 
+            },
+            where: whereClause
+        })
+
+        return data
+    }
 }
