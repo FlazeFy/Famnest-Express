@@ -7,6 +7,7 @@ import AuthRouter from "./routes/auth.router"
 import AllergicRouter from "./routes/allergic.router"
 import HistoryRouter from "./routes/history.router"
 import FeedbackRouter from "./routes/feedback.router"
+import QuestionRouter from "./routes/question.router"
 
 const PORT = process.env.PORT
 
@@ -36,12 +37,14 @@ class App {
         const allergicRouter = new AllergicRouter()
         const historyRouter = new HistoryRouter()
         const feedbackRouter = new FeedbackRouter()
+        const questionRouter = new QuestionRouter()
         const authRouter = new AuthRouter()
         this.app.use("/api/v1/dictionaries", dictionaryRouter.getRouter())
         this.app.use("/api/v1/auths", authRouter.getRouter())
         this.app.use("/api/v1/allergics", allergicRouter.getRouter())
         this.app.use("/api/v1/histories", historyRouter.getRouter())
         this.app.use("/api/v1/feedbacks", feedbackRouter.getRouter())
+        this.app.use("/api/v1/questions", questionRouter.getRouter())
     }
 
     // Error handling
