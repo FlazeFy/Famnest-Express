@@ -12,9 +12,7 @@ export class UserRepository {
 
     public findRandomUserNoFamily = async () => {
         const usersWithoutFamilyCount = await prisma.user.count({
-            where: {
-                families: { none: {} },
-            },
+            where: { families: { none: {} } }
         })
     
         if (usersWithoutFamilyCount === 0) throw new Error("No available users without family")
@@ -23,9 +21,7 @@ export class UserRepository {
 
         return prisma.user.findFirst({
             skip,
-            where: {
-                families: { none: {} },
-            },
+            where: { families: { none: {} } },
             select: { id: true },
         })
     }
@@ -41,6 +37,22 @@ export class UserRepository {
         return prisma.user.findFirst({
             skip,
             where: { families: { some: {} } },
+            select: { id: true },
+        })
+    }
+
+    public findRandomUserFamilyMeal = async () => {
+        const whereClause = { families: { some: { meals: { some: {} } } } }
+        const count = await prisma.user.count({
+            where: whereClause
+        })
+        if (count === 0) throw new Error("No available users with family and meal")
+    
+        const skip = Math.floor(Math.random() * count)
+    
+        return prisma.user.findFirst({
+            skip,
+            where: whereClause,
             select: { id: true },
         })
     }

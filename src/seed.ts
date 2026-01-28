@@ -14,6 +14,8 @@ import ScheduleFactory from "./factories/schedule.factory"
 import EventFactory from "./factories/event.factory"
 import AdminFactory from "./factories/admin.factory"
 import QuestionFactory from "./factories/question.factory"
+import MealFactory from "./factories/meal.factory"
+import MealPrepareByFactory from "./factories/meal_prepare_by.factory"
 
 export const dictionaries = [
     // Event Categories
@@ -68,10 +70,13 @@ class Seeder {
     private scheduleFactory = new ScheduleFactory()
     private eventFactory = new EventFactory()
     private questionFactory = new QuestionFactory()
+    private mealFactory = new MealFactory()
+    private mealPrepareByFactory = new MealPrepareByFactory()
     private password = "nopass123"
 
     private clearAllTables = async () => {
         await prisma.question.deleteMany()
+        await prisma.meal.deleteMany()
         await prisma.event.deleteMany()
         await prisma.schedule.deleteMany()
         await prisma.task_assign.deleteMany()
@@ -113,6 +118,8 @@ class Seeder {
             await this.scheduleFactory.createMany(200)
             await this.eventFactory.createMany(500)
             await this.questionFactory.createMany(50)
+            await this.mealFactory.createMany(600)
+            await this.mealPrepareByFactory.createMany(1300)
         } catch (err) {
             console.error(err)
         } finally {

@@ -19,6 +19,22 @@ export class FamilyMemberRepository {
                 user_id: true,
             },
         })
-    }      
+    }   
+
+    public findFamilyMemberMealAssignable = async (familyOwnerId: string) => {
+        return prisma.family_member.findFirst({
+            where: {
+                family: {
+                    id: familyOwnerId,
+                    meals: {
+                        some: {},
+                    },
+                }
+            },
+            select: {
+                user_id: true,
+            },
+        })
+    }   
 }
   
