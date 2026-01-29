@@ -10,6 +10,7 @@ import FeedbackRouter from "./routes/feedback.router"
 import QuestionRouter from "./routes/question.router"
 import MealRouter from "./routes/meal.router"
 import TaskRouter from "./routes/task.router"
+import { auditError } from "./utils/audit.util"
 
 const PORT = process.env.PORT
 
@@ -56,8 +57,20 @@ class App {
     // Error handling
     private errorHandler = () => {
         this.app.use((err: any, req: Request, res: Response, next:NextFunction) => {
-            const { code, ...cleanError } = err
-            res.status(err.code || 500).send(cleanError)
+            const statusCode = err.code || 500
+
+            // Audit server error
+            if (statusCode === 500) {
+                auditError(err, req)
+
+                res.status(500).json({
+                    message: "Something went wrong",
+                })
+            }
+
+            res.status(statusCode).json({
+                message: err.message,
+            })
         })
     }
 
