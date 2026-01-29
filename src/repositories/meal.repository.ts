@@ -6,7 +6,7 @@ export class MealRepository {
         const count = await prisma.meal.count({
             where: whereClause
         })
-        if (count === 0) throw new Error('No meal found. Seed meal first')
+        if (count === 0) return null
     
         const skip = Math.floor(Math.random() * count)
     

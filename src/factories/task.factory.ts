@@ -27,7 +27,22 @@ class TaskFactory {
         const family = await this.familyRepository.findFamilyByUserId(user.id)
         if (!family) throw new Error('Cannot create task without family')
 
+        // Get random task status
         const taskStatus = this.randomTaskStatus()
+
+        // Get random start datetime
+        const startDate = taskStatus === 'completed' ? faker.date.past({ years: 1 }) : faker.date.between({
+            from: new Date(),
+            to: new Date(new Date().setMonth(new Date().getMonth() + 2)),
+        })
+        
+        // Get random end datetime
+        const dueDate = new Date(startDate)
+        dueDate.setHours(dueDate.getHours() + faker.number.int({ min: 1, max: 5 }))
+
+        // Get random tag
+        const tagCount = faker.number.int({ min: 0, max: 5 })
+        const tags = Array.from({ length: tagCount }, () => faker.lorem.word())
 
         return prisma.task.create({
             data: {
@@ -35,10 +50,9 @@ class TaskFactory {
                 task_title: faker.lorem.words(2),
                 task_desc: faker.datatype.boolean() ? faker.lorem.sentence() : null,                
                 status: taskStatus,
-                due_date: taskStatus === 'completed' ? faker.date.past({ years: 1 }) : faker.date.between({
-                    from: new Date(),
-                    to: new Date(new Date().setMonth(new Date().getMonth() + 2)),
-                }),
+                start_date: startDate,
+                due_date: dueDate,
+                tags,
                 family: { connect: { id: family.id } },
                 created_at: faker.date.past({ years: 1 }),
                 user: { connect: { id: user.id } },

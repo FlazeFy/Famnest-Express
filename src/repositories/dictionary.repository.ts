@@ -23,7 +23,7 @@ export class DictionaryRepository {
             where: { dictionary_type: type }
         })
     
-        if (count === 0) throw new Error('No dictionary found. Seed dictionary first')
+        if (count === 0) return null
     
         const skip = Math.floor(Math.random() * count)
     

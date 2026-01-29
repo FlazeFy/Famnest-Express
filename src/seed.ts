@@ -76,6 +76,7 @@ class Seeder {
 
     private clearAllTables = async () => {
         await prisma.question.deleteMany()
+        await prisma.meal_prepare_by.deleteMany()
         await prisma.meal.deleteMany()
         await prisma.event.deleteMany()
         await prisma.schedule.deleteMany()
