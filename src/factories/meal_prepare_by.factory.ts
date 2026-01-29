@@ -28,7 +28,7 @@ class MealPrepareByFactory {
         if (!family) throw new Error('Cannot create meal prepare by without family')
 
         // Get random meal from repo
-        const meal = await this.mealRepository.findRandomMealByFamilyId(family.id)
+        const meal = await this.mealRepository.findRandomMealByFamilyIdRepo(family.id)
         if (!meal) throw new Error('Cannot create meal prepare by without meal')
 
         // Get random family member
