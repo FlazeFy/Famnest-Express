@@ -21,14 +21,10 @@ export class HistoryController {
     
             // Service : Get all history
             const result = await this.historyService.getAllHistoryService(page, limit, role === "user" ? userId : null)
-            if (!result) {
-                return res.status(404).json({
-                    message: "History not found"
-                })
-            }
+            if (!result) throw { code: 404, message: "History not found" }
     
             // Success response
-            res.status(200).json({
+            return res.status(200).json({
                 message: "Get history successful",
                 data: result.data,
                 meta: {
@@ -46,25 +42,17 @@ export class HistoryController {
             const { id } = req.params
 
             // Validate : UUID
-            if (!isUuid(id)) {
-                return res.status(400).json({
-                    message: "Invalid UUID format",
-                })
-            }
+            if (!isUuid(id)) throw { code: 400, message: "Invalid UUID format" }
     
             // Get user id
             const { userId } = extractUserFromAuthHeader(req.headers.authorization)
     
             // Service : Hard delete history by id
             const result = await this.historyService.hardDeleteHistoryByIdService(id as string, userId)
-            if (!result) {
-                return res.status(404).json({
-                    message: "History not found"
-                })
-            }
+            if (!result) throw { code: 404, message: "History not found" }
     
             // Success response
-            res.status(200).json({
+            return res.status(200).json({
                 message: "Delete history successful",
                 data: result,
             })

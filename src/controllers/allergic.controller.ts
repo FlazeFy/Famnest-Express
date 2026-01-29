@@ -21,14 +21,10 @@ export class AllergicController {
     
             // Service : Get all allergic
             const result = await this.allergicService.getAllAllergicService(page, limit, role === "user" ? userId : null)
-            if (!result) {
-                return res.status(404).json({
-                    message: "Allergic not found"
-                })
-            }
+            if (!result) throw { code: 404, message: "Allergic not found" }
     
             // Success response
-            res.status(200).json({
+            return res.status(200).json({
                 message: "Get allergic successful",
                 data: result.data,
                 meta: {
@@ -46,25 +42,17 @@ export class AllergicController {
             const id = req.params.id as string
 
             // Validate : UUID
-            if (!isUuid(id)) {
-                return res.status(400).json({
-                    message: "Invalid UUID format",
-                })
-            }
+            if (!isUuid(id)) throw { code: 400, message: "Invalid UUID format" }
 
             // Get user id
             const { userId, role } = extractUserFromAuthHeader(req.headers.authorization)
     
             // Service : Hard delete allergic by id
             const result = await this.allergicService.hardDeleteAllergicByIdService(id, role === "user" ? userId : null)
-            if (!result) {
-                return res.status(404).json({
-                    message: "Allergic not found"
-                })
-            }
+            if (!result) throw { code: 404, message: "Allergic not found" }
     
             // Success response
-            res.status(200).json({
+            return res.status(200).json({
                 message: "Delete allergic successful",
                 data: result,
             })

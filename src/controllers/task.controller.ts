@@ -23,7 +23,7 @@ export class TaskController {
             if (!result) throw { code: 404, message: "Task not found" }
     
             // Success response
-            res.status(200).json({
+            return res.status(200).json({
                 message: "Get task successful",
                 data: result.data,
                 meta: {

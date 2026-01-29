@@ -14,11 +14,7 @@ export class QuestionController {
 
             // Service : Send question
             const result = await this.questionService.postQuestionService(question, email)
-            if (!result) {
-                return res.status(500).json({
-                    message: "Something went wrong",
-                })
-            }
+            if (!result) throw { code: 500, message: "Something went wrong" }
 
             // Success response
             return res.status(201).json({
@@ -37,14 +33,10 @@ export class QuestionController {
     
             // Service : Get random answered question
             const result = await this.questionService.getRandomAnsweredQuestionService(limit)
-            if (!result) {
-                return res.status(404).json({
-                    message: "Question not found"
-                })
-            }
+            if (!result) throw { code: 404, message: "Question not found" }
     
             // Success response
-            res.status(200).json({
+            return res.status(200).json({
                 message: "Get question successful",
                 data: result,
             })

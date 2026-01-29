@@ -22,11 +22,7 @@ export class AuthController {
 
             // Service : Login
             const result = await this.authService.loginService(email, password)
-            if (!result) {
-                return res.status(401).json({
-                    message: "Invalid email or password",
-                })
-            }
+            if (!result) throw { code: 401, message: "Invalid email or password" }
 
             // Success response
             return res.status(200).json({
@@ -44,19 +40,11 @@ export class AuthController {
             const authHeader = req.headers.authorization
             const refreshToken = authHeader?.split(" ")[1]
 
-            if (!refreshToken) {
-                return res.status(400).json({
-                    message: "Refresh token required",
-                })
-            }
+            if (!refreshToken) throw { code: 401, message: "Refresh token required" }
 
             // Service : Refresh token
             const result = await this.authService.refreshTokenService(refreshToken)
-            if (!result) {
-                return res.status(401).json({
-                    message: "Invalid refresh token",
-                })
-            }
+            if (!result) throw { code: 401, message: "Invalid refresh token" }
 
             // Success response
             return res.status(200).json({
@@ -84,17 +72,10 @@ export class AuthController {
                     result = await this.adminService.getAdminByIdService(userId)
                     break;
                 default:
-                    res.status(409).json({
-                        message: "Role not valid"
-                    })
-                    break;
+                    throw { code: 409, message: "Role not valid" }
             }
     
-            if (!result) {
-                return res.status(404).json({
-                    message: "User not found"
-                })
-            }
+            if (!result) throw { code: 404, message: "User not found" }
             const { password, ...finalRes } = result
     
             // Success response

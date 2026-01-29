@@ -16,14 +16,10 @@ export class MealController {
     
             // Service : Get all meal
             const result = await this.mealService.getAllMealService(userId)
-            if (!result) {
-                return res.status(404).json({
-                    message: "Meal not found"
-                })
-            }
+            if (!result) throw { code: 404, message: "Meal not found" }
     
             // Success response
-            res.status(200).json({
+            return res.status(200).json({
                 message: "Get meal successful",
                 data: result
             })

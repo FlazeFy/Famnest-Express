@@ -17,22 +17,14 @@ export class FeedbackController {
 
             // Get user id
             const { userId, role } = extractUserFromAuthHeader(req.headers.authorization)
-            if (!role){
-                return res.status(404).json({
-                    message: "Role not valid"
-                })
-            }
+            if (!role) throw { code: 404, message: "Role not valid" }
     
             // Service : Get all feedback
             const result = await this.feedbackService.getAllFeedbackService(page, limit, role)
-            if (!result) {
-                return res.status(404).json({
-                    message: "Feedback not found"
-                })
-            }
+            if (!result) throw { code: 404, message: "Feedback not found" }
     
             // Success response
-            res.status(200).json({
+            return res.status(200).json({
                 message: "Get feedback successful",
                 data: result.data,
                 meta: {
@@ -51,14 +43,10 @@ export class FeedbackController {
     
             // Service : Get random feedback
             const result = await this.feedbackService.getRandomFeedbackService(limit)
-            if (!result) {
-                return res.status(404).json({
-                    message: "Feedback not found"
-                })
-            }
+            if (!result) throw { code: 404, message: "Feedback not found" }
     
             // Success response
-            res.status(200).json({
+            return res.status(200).json({
                 message: "Get feedback successful",
                 data: result,
             })

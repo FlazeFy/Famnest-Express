@@ -17,14 +17,10 @@ export class DictionaryController {
     
             // Service : Get all dictionary
             const result = await this.dictionaryService.getAllDictionaryService(page, limit)
-            if (!result) {
-                return res.status(404).json({
-                    message: "Dictionary not found"
-                })
-            }
+            if (!result) throw { code: 404, message: "Dictionary not found" }
     
             // Success response
-            res.status(200).json({
+            return res.status(200).json({
                 message: "Get dictionary successful",
                 data: result.data,
                 meta: {
@@ -42,22 +38,14 @@ export class DictionaryController {
             const id = req.params.id as string
 
             // Validate : UUID
-            if (!isUuid(id)) {
-                return res.status(400).json({
-                    message: "Invalid UUID format",
-                })
-            }
+            if (!isUuid(id)) throw { code: 400, message: "Invalid UUID format" }
     
             // Service : Hard delete dictionary by id
             const result = await this.dictionaryService.hardDeleteDictionaryByIdService(id)
-            if (!result) {
-                return res.status(404).json({
-                    message: "Dictionary not found"
-                })
-            }
+            if (!result) throw { code: 404, message: "Dictionary not found" }
     
             // Success response
-            res.status(200).json({
+            return res.status(200).json({
                 message: "Delete dictionary successful",
                 data: result,
             })
