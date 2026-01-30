@@ -21,7 +21,7 @@ export class FamilyRepository {
         return prisma.family.findFirst({
             skip,
             where: { created_by: userId },
-            select: { id: true },
+            omit: { deleted_at: true }
         })
     }
 }

@@ -3,14 +3,34 @@ import { createToken } from "../utils/token.util"
 import { AdminRepository } from "../repositories/admin.repository"
 import { UserRepository } from "../repositories/user.repository"
 import jwt from "jsonwebtoken"
+import { FamilyRepository } from "../repositories/family.repository"
+import { FamilyMemberRepository } from "../repositories/family_member.repository"
 
 export class AuthService {
     private adminRepo: AdminRepository
     private userRepo: UserRepository
+    private familyRepo: FamilyRepository
+    private familyMemberRepo: FamilyMemberRepository
 
     constructor(){
         this.adminRepo = new AdminRepository()
         this.userRepo = new UserRepository()
+        this.familyRepo = new FamilyRepository()
+        this.familyMemberRepo = new FamilyMemberRepository()
+    }
+
+    private findFamilyByUserId = async (userId: string) => {
+        // Repo : Find family by user id
+        const family = await this.familyRepo.findFamilyByUserId(userId)
+
+        // Repo : Find family member by family id
+        let familyWithMembers = null
+        if (family) {
+            const familyMember = await this.familyMemberRepo.findFamilyMemberByFamilyId(family.id)
+            familyWithMembers = { ...family, familyMember }
+        }
+
+        return familyWithMembers
     }
 
     public loginService = async (email: string, password: string) => {
@@ -44,7 +64,8 @@ export class AuthService {
                 name: user.username,
                 email: user.email,
                 role: "user",
-                token
+                token,
+                family: await this.findFamilyByUserId(user.id)
             }
         }
     
@@ -82,7 +103,8 @@ export class AuthService {
                 name: user.username,
                 email: user.email,
                 role: "user",
-                token
+                token,
+                family: await this.findFamilyByUserId(user.id)
             }
         }
 
