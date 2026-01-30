@@ -13,9 +13,10 @@ export default class TaskRouter {
     }
 
     private initializeRoute = () => {
-        const { getAllTaskController } = this.taskController
+        const { getAllTaskController, getIncomingTaskController } = this.taskController
 
         this.route.get("/", verifyAuthToken, authorizeRole(["admin","user"]), getAllTaskController)
+        this.route.get("/incoming", verifyAuthToken, authorizeRole(["admin","user"]), getIncomingTaskController)
     }
 
     public getRouter = (): Router => {

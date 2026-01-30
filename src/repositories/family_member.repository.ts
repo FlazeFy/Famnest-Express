@@ -7,7 +7,12 @@ export class FamilyMemberRepository {
             orderBy: { 
                 user: { fullname: "asc" } 
             },
-            select: { id: true, family_relation: true, user_id: true }
+            select: { 
+                id: true, family_relation: true, user_id: true, 
+                user: {
+                    select: { username: true, fullname: true }
+                }
+            }
         })
     }
 
