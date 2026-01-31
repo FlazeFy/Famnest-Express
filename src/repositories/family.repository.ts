@@ -10,6 +10,22 @@ export class FamilyRepository {
         return prisma.family.findFirst({ skip, select: { id: true, created_by: true }})
     }
 
+    public findRandomFamilyNoSleepTimeRepo = async () => {
+        const familyWithoutSleepTime = await prisma.family.count({
+            where: { family_sleep_time: { none: {} } }
+        })
+    
+        if (familyWithoutSleepTime === 0) return null
+    
+        const skip = Math.floor(Math.random() * familyWithoutSleepTime)
+
+        return prisma.family.findFirst({
+            skip,
+            where: { family_sleep_time: { none: {} } },
+            select: { id: true, created_by: true },
+        })
+    }
+
     public findFamilyByUserIdRepo = async (userId: string) => {
         const count = await prisma.family.count({
             where: { created_by: userId },
