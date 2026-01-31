@@ -12,7 +12,7 @@ export class MealService {
 
     public getAllMealService = async (userId: string) => {
         // Repo : Find family id by user id
-        const family = await this.familyRepo.findFamilyByUserId(userId)
+        const family = await this.familyRepo.findFamilyByUserIdRepo(userId)
         if (!family) return null
 
         // Repo : Find all meal

@@ -66,12 +66,12 @@ class App {
             if (statusCode === 500) {
                 auditError(err, req)
 
-                res.status(500).json({
+                return res.status(500).json({
                     message: "Something went wrong",
                 })
             }
 
-            res.status(statusCode).json({
+            return res.status(statusCode).json({
                 message: err.message,
             })
         })

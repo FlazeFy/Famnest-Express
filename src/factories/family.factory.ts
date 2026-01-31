@@ -14,7 +14,7 @@ class FamilyFactory {
 
     public create = async () => {
         // Get random user with no family from repo
-        const user = await this.userRepository.findRandomUserNoFamily()
+        const user = await this.userRepository.findRandomUserNoFamilyRepo()
         if (!user) throw new Error('Family requires an user')
 
         const familyRelation = await this.dictionaryRepository.findRandomDictionaryByDictionaryTypeRepo('family_relation')

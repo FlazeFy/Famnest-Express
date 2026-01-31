@@ -14,7 +14,7 @@ class TaskAssignFactory {
 
     public create = async () => {
         // Get random task from repo
-        const task = await this.taskRepository.findRandomTaskHasFamilyMember()
+        const task = await this.taskRepository.findRandomTaskHasFamilyMemberRepo()
         if (!task) throw new Error("No task available to assign")
 
         const assignedUserIds = task.task_assigns.map(a => a.assign_to)
@@ -23,7 +23,7 @@ class TaskAssignFactory {
             assignedTo = task.created_by
         } else {
             // Get random family member from repo
-            const member = await this.familyMemberRepository.findFamilyMemberTaskAssignable(task.created_by, task.id)
+            const member = await this.familyMemberRepository.findFamilyMemberTaskAssignableRepo(task.created_by, task.id)
             // If no one left to assign just skip
             if (!member) return null
 

@@ -35,7 +35,7 @@ class EventFactory {
 
     public create = async () => {
         // Get random family from repo
-        const family = await this.familyRepository.findRandomFamily()
+        const family = await this.familyRepository.findRandomFamilyRepo()
         if (!family) throw new Error('Event requires a family')
 
         // Get random event category from repo

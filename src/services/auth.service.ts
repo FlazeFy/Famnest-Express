@@ -19,14 +19,14 @@ export class AuthService {
         this.familyMemberRepo = new FamilyMemberRepository()
     }
 
-    private findFamilyByUserId = async (userId: string) => {
+    private findFamilyByUserIdService = async (userId: string) => {
         // Repo : Find family by user id
-        const family = await this.familyRepo.findFamilyByUserId(userId)
+        const family = await this.familyRepo.findFamilyByUserIdRepo(userId)
 
         // Repo : Find family member by family id
         let familyWithMembers = null
         if (family) {
-            const familyMember = await this.familyMemberRepo.findFamilyMemberByFamilyId(null, null, family.id)
+            const familyMember = await this.familyMemberRepo.findFamilyMemberByFamilyIdRepo(null, null, family.id)
             familyWithMembers = { ...family, familyMember }
         }
 
@@ -65,7 +65,7 @@ export class AuthService {
                 email: user.email,
                 role: "user",
                 token,
-                family: await this.findFamilyByUserId(user.id)
+                family: await this.findFamilyByUserIdService(user.id)
             }
         }
     
@@ -104,7 +104,7 @@ export class AuthService {
                 email: user.email,
                 role: "user",
                 token,
-                family: await this.findFamilyByUserId(user.id)
+                family: await this.findFamilyByUserIdService(user.id)
             }
         }
 

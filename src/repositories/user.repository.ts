@@ -1,7 +1,7 @@
 import { prisma } from '../configs/prisma'
 
 export class UserRepository {
-    public findRandomUser = async () => {
+    public findRandomUserRepo = async () => {
         const count = await prisma.user.count()
         if (count === 0) return null
     
@@ -10,7 +10,7 @@ export class UserRepository {
         return prisma.user.findFirst({ skip, select: { id: true, email: true }})
     }
 
-    public findRandomUserNoFamily = async () => {
+    public findRandomUserNoFamilyRepo = async () => {
         const usersWithoutFamilyCount = await prisma.user.count({
             where: { families: { none: {} } }
         })
@@ -26,7 +26,7 @@ export class UserRepository {
         })
     }
 
-    public findRandomUserFamily = async () => {
+    public findRandomUserFamilyRepo = async () => {
         const count = await prisma.user.count({
             where: { families: { some: {} } }
         })
@@ -41,7 +41,7 @@ export class UserRepository {
         })
     }
 
-    public findRandomUserFamilyMeal = async () => {
+    public findRandomUserFamilyMealRepo = async () => {
         const whereClause = { families: { some: { meals: { some: {} } } } }
         const count = await prisma.user.count({
             where: whereClause

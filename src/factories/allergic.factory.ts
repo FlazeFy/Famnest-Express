@@ -11,7 +11,7 @@ class AllergicFactory {
 
     public create = async () => {
         // Get random user from repo
-        const user = await this.userRepository.findRandomUser()
+        const user = await this.userRepository.findRandomUserRepo()
         if (!user) throw new Error('Cannot create allergic without users')
 
         return prisma.allergic.create({

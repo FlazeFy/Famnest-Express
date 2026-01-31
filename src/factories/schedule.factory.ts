@@ -38,7 +38,7 @@ class ScheduleFactory {
 
     public create = async () => {
         // Get random family from repo
-        const family = await this.familyRepository.findRandomFamily()
+        const family = await this.familyRepository.findRandomFamilyRepo()
         if (!family) throw new Error('Schedule requires a family')
 
         // Get random schedule category from repo

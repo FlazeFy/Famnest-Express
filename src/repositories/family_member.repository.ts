@@ -1,7 +1,7 @@
 import { prisma } from '../configs/prisma'
 
 export class FamilyMemberRepository {
-    public findFamilyMemberByFamilyId = async (page: number | null, limit: number | null, familyId: string) => {
+    public findFamilyMemberByFamilyIdRepo = async (page: number | null, limit: number | null, familyId: string) => {
         if (page && limit) {
             const skip = (page - 1) * limit
             const where = { family_id: familyId }
@@ -11,9 +11,13 @@ export class FamilyMemberRepository {
                     where,
                     skip,
                     take: limit,
-                    orderBy: {
-                        user: { fullname: 'asc' },
-                    }
+                    select: {
+                        id: true, family_relation: true,
+                        user: {
+                            select: { id: true, username: true, fullname: true, born_at: true, profile_image: true }
+                        }  
+                    },
+                    orderBy: { user: { fullname: 'asc' } }
                 }),
                 prisma.family_member.count({ where }),
             ])
@@ -37,7 +41,7 @@ export class FamilyMemberRepository {
         }
     }
 
-    public findFamilyMemberTaskAssignable = async (familyOwnerId: string, taskId: string) => {
+    public findFamilyMemberTaskAssignableRepo = async (familyOwnerId: string, taskId: string) => {
         return prisma.family_member.findFirst({
             where: {
                 family: { created_by: familyOwnerId },
@@ -51,7 +55,7 @@ export class FamilyMemberRepository {
         })
     }   
 
-    public findFamilyMemberMealAssignable = async (familyOwnerId: string) => {
+    public findFamilyMemberMealAssignableRepo = async (familyOwnerId: string) => {
         return prisma.family_member.findFirst({
             where: {
                 family: {

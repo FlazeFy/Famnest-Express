@@ -20,11 +20,11 @@ class TaskFactory {
 
     public create = async () => {
         // Get random user from repo
-        const user = await this.userRepository.findRandomUserFamily()
+        const user = await this.userRepository.findRandomUserFamilyRepo()
         if (!user) throw new Error('Cannot create task without users')
 
         // Get random family from repo
-        const family = await this.familyRepository.findFamilyByUserId(user.id)
+        const family = await this.familyRepository.findFamilyByUserIdRepo(user.id)
         if (!family) throw new Error('Cannot create task without family')
 
         // Get random task status

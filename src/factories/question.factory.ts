@@ -14,7 +14,7 @@ class QuestionFactory {
 
         if (faker.datatype.boolean()){
             // Get random user from repo
-            const user = await this.userRepository.findRandomUser()
+            const user = await this.userRepository.findRandomUserRepo()
             if (!user) throw new Error('Cannot create question without users')
 
             email = user.email

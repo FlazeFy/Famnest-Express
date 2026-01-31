@@ -24,11 +24,11 @@ class MealFactory {
 
     public create = async () => {
         // Get random user from repo
-        const user = await this.userRepository.findRandomUserFamily()
+        const user = await this.userRepository.findRandomUserFamilyRepo()
         if (!user) throw new Error('Cannot create meal without users')
 
         // Get random family from repo
-        const family = await this.familyRepository.findFamilyByUserId(user.id)
+        const family = await this.familyRepository.findFamilyByUserIdRepo(user.id)
         if (!family) throw new Error('Cannot create meal without family')
 
         return prisma.meal.create({

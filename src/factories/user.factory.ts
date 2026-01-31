@@ -1,8 +1,14 @@
 import { faker } from "@faker-js/faker"
 import { prisma } from "../configs/prisma"
+import { Gender } from "../generated/prisma/enums"
 import { hashPassword } from "../utils/auth.util"
+import { randomEnumValue } from "../utils/generator.util"
 
 class UserFactory {
+    private randomGender = (): Gender => {
+        return randomEnumValue(Object.values(Gender))
+    }
+
     public create = async (password: string) => {
         return prisma.user.create({
             data: {
@@ -14,6 +20,7 @@ class UserFactory {
                 bio: faker.lorem.sentences(2),
                 profile_image: null,
                 born_at: faker.date.birthdate(),
+                gender: this.randomGender(),
                 created_at: faker.date.past({ years: 1 }),
             },
         })

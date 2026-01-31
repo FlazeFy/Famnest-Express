@@ -17,14 +17,14 @@ class FamilyMemberFactory {
 
     public create = async () => {
         // Get random family from repo
-        const family = await this.familyRepository.findRandomFamily()
+        const family = await this.familyRepository.findRandomFamilyRepo()
         if (!family) throw new Error('Family member requires a family')
 
         // Get random family relation from repo
         const familyRelation = await this.dictionaryRepository.findRandomDictionaryByDictionaryTypeRepo('family_relation')
         if (!familyRelation) throw new Error('Family member requires a family relation')
 
-        const user = await this.userRepository.findRandomUserNoFamily()
+        const user = await this.userRepository.findRandomUserNoFamilyRepo()
         if (!user) throw new Error('Family member requires a user')
 
         return prisma.family_member.create({

@@ -1,7 +1,7 @@
 import { prisma } from '../configs/prisma'
 
 export class TaskRepository {
-    public findRandomTaskHasFamilyMember = async () => {
+    public findRandomTaskHasFamilyMemberRepo = async () => {
         const whereClause = {
             family: {
                 family_members: { some: {} },

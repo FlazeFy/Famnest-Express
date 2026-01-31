@@ -20,11 +20,11 @@ class MealPrepareByFactory {
 
     public create = async () => {
         // Get random user from repo
-        const user = await this.userRepository.findRandomUserFamilyMeal()
+        const user = await this.userRepository.findRandomUserFamilyMealRepo()
         if (!user) throw new Error('Cannot create meal prepare by without users')
 
         // Get random family from repo
-        const family = await this.familyRepository.findFamilyByUserId(user.id)
+        const family = await this.familyRepository.findFamilyByUserIdRepo(user.id)
         if (!family) throw new Error('Cannot create meal prepare by without family')
 
         // Get random meal from repo
@@ -32,7 +32,7 @@ class MealPrepareByFactory {
         if (!meal) throw new Error('Cannot create meal prepare by without meal')
 
         // Get random family member
-        const familyMember = await this.familyMemberRepository.findFamilyMemberMealAssignable(family.id)
+        const familyMember = await this.familyMemberRepository.findFamilyMemberMealAssignableRepo(family.id)
         if (!familyMember) throw new Error('Cannot create meal prepare by without users')
 
         return prisma.meal_prepare_by.create({

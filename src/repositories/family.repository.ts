@@ -1,7 +1,7 @@
 import { prisma } from '../configs/prisma'
 
 export class FamilyRepository {
-    public findRandomFamily = async () => {
+    public findRandomFamilyRepo = async () => {
         const count = await prisma.family.count()
         if (count === 0) return null
     
@@ -10,7 +10,7 @@ export class FamilyRepository {
         return prisma.family.findFirst({ skip, select: { id: true, created_by: true }})
     }
 
-    public findFamilyByUserId = async (userId: string) => {
+    public findFamilyByUserIdRepo = async (userId: string) => {
         const count = await prisma.family.count({
             where: { created_by: userId },
         })

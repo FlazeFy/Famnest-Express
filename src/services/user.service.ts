@@ -19,12 +19,12 @@ export class UserService {
         if (!user) return null 
 
         // Repo : Find family by user id
-        const family = await this.familyRepo.findFamilyByUserId(id)
+        const family = await this.familyRepo.findFamilyByUserIdRepo(id)
 
         // Repo : Find family member by family id
         let familyWithMembers = null
         if (family) {
-            const familyMember = await this.familyMemberRepo.findFamilyMemberByFamilyId(null, null, family.id)
+            const familyMember = await this.familyMemberRepo.findFamilyMemberByFamilyIdRepo(null, null, family.id)
             familyWithMembers = { ...family, familyMember }
         }
 
