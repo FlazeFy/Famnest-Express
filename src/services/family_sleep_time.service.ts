@@ -18,4 +18,13 @@ export class FamilySleepTimeService {
         // Repo : Find family sleep time
         return await this.familySleepTimeRepo.findFamilySleepTimeByFamilyIdRepo(family.id)
     }
+
+    public hardDeleteFamilySleepTimeService = async (userId: string) => {
+        // Repo : Find family id by user id
+        const family = await this.familyRepo.findFamilyByUserIdRepo(userId)
+        if (!family) return null
+
+        // Repo : Delete family sleep time
+        return await this.familySleepTimeRepo.deleteFamilySleepTimeByFamilyIdRepo(family.id)
+    }
 }

@@ -13,9 +13,10 @@ export default class FamilySleepTimeRouter {
     }
 
     private initializeRoute = () => {
-        const { getFamilySleepTimeController } = this.familySleepTimeController
+        const { getFamilySleepTimeController, hardDeleteSleepTimeByIdController } = this.familySleepTimeController
 
         this.route.get("/", verifyAuthToken, authorizeRole(["user"]), getFamilySleepTimeController)
+        this.route.delete("/", verifyAuthToken, authorizeRole(["user"]), hardDeleteSleepTimeByIdController)
     }
 
     public getRouter = (): Router => {

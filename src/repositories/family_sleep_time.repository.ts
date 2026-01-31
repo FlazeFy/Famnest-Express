@@ -11,5 +11,10 @@ export class FamilySleepTimeRepository {
             }
         })
     }
+
+    public deleteFamilySleepTimeByFamilyIdRepo = async (familyId: string) => {
+        return await prisma.family_sleep_time.deleteMany({
+            where: { family_id: familyId }
+        })
+    }
 }
-  

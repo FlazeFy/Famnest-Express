@@ -27,4 +27,22 @@ export class FamilySleepTimeController {
             next(error)
         }
     }
+
+    public hardDeleteSleepTimeByIdController = async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            // Get user id
+            const { userId, role } = extractUserFromAuthHeader(req.headers.authorization)
+    
+            // Service : Hard delete sleep time
+            const result = await this.familySleepTimeService.hardDeleteFamilySleepTimeService(userId)
+            if (!result || result.count === 0) throw { code: 404, message: "Sleep time not found" }
+    
+            // Success response
+            return res.status(200).json({
+                message: "Delete sleep time successful"
+            })
+        } catch (error: any) {
+            next(error)
+        }
+    }
 }
