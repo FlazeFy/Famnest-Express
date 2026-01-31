@@ -26,7 +26,7 @@ export class AuthService {
         // Repo : Find family member by family id
         let familyWithMembers = null
         if (family) {
-            const familyMember = await this.familyMemberRepo.findFamilyMemberByFamilyId(family.id)
+            const familyMember = await this.familyMemberRepo.findFamilyMemberByFamilyId(null, null, family.id)
             familyWithMembers = { ...family, familyMember }
         }
 

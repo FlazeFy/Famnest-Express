@@ -1,19 +1,40 @@
 import { prisma } from '../configs/prisma'
 
 export class FamilyMemberRepository {
-    public findFamilyMemberByFamilyId = async (familyId: string) => {
-        return prisma.family_member.findMany({
-            where: { family_id: familyId },
-            orderBy: { 
-                user: { fullname: "asc" } 
-            },
-            select: { 
-                id: true, family_relation: true, user_id: true, 
-                user: {
-                    select: { username: true, fullname: true }
+    public findFamilyMemberByFamilyId = async (page: number | null, limit: number | null, familyId: string) => {
+        if (page && limit) {
+            const skip = (page - 1) * limit
+            const where = { family_id: familyId }
+    
+            const [data, total] = await Promise.all([
+                prisma.family_member.findMany({
+                    where,
+                    skip,
+                    take: limit,
+                    orderBy: {
+                        user: { fullname: 'asc' },
+                    }
+                }),
+                prisma.family_member.count({ where }),
+            ])
+    
+            return { data, total }
+        } else {
+            const data = await prisma.family_member.findMany({
+                where: { family_id: familyId },
+                orderBy: { 
+                    user: { fullname: "asc" } 
+                },
+                select: { 
+                    id: true, family_relation: true, user_id: true, 
+                    user: {
+                        select: { username: true, fullname: true }
+                    }
                 }
-            }
-        })
+            })
+
+            return { data, total: data.length }
+        }
     }
 
     public findFamilyMemberTaskAssignable = async (familyOwnerId: string, taskId: string) => {

@@ -11,6 +11,7 @@ import QuestionRouter from "./routes/question.router"
 import MealRouter from "./routes/meal.router"
 import TaskRouter from "./routes/task.router"
 import { auditError } from "./utils/audit.util"
+import FamilyMemberRouter from "./routes/family_member.router"
 
 const PORT = process.env.PORT
 
@@ -43,6 +44,7 @@ class App {
         const questionRouter = new QuestionRouter()
         const mealRouter = new MealRouter()
         const taskRouter = new TaskRouter()
+        const familyMemberRouter = new FamilyMemberRouter()
         const authRouter = new AuthRouter()
         this.app.use("/api/v1/dictionaries", dictionaryRouter.getRouter())
         this.app.use("/api/v1/auths", authRouter.getRouter())
@@ -52,6 +54,7 @@ class App {
         this.app.use("/api/v1/questions", questionRouter.getRouter())
         this.app.use("/api/v1/meals", mealRouter.getRouter())
         this.app.use("/api/v1/tasks", taskRouter.getRouter())
+        this.app.use("/api/v1/family_members", familyMemberRouter.getRouter())
     }
 
     // Error handling
