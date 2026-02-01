@@ -50,5 +50,11 @@ export class FeedbackRepository {
             },
         })
     }
+
+    public deleteFeedbackByIdRepo = async (id: string) => {
+        return await prisma.feedback.delete({
+            where: { id }
+        })
+    }
 }
   

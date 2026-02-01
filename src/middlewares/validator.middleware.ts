@@ -42,11 +42,9 @@ export const validateBodyMiddleware = (schema: ValidatorSchema) => {
                 if (rules.min && value.length < rules.min) {
                     errors[field] = `${field} must be at least ${rules.min} characters`
                 }
-
                 if (rules.max && value.length > rules.max) {
                     errors[field] = `${field} must be at most ${rules.max} characters`
                 }
-
                 if (rules.isEmail && !GMAIL_REGEX.test(value)) {
                     errors[field] = `email must be a valid gmail address`
                 }
@@ -57,11 +55,9 @@ export const validateBodyMiddleware = (schema: ValidatorSchema) => {
                     errors[field] = `${field} must be a valid number`
                     continue
                 }
-
                 if (rules.min !== undefined && value < rules.min) {
                     errors[field] = `${field} must be greater than or equal to ${rules.min}`
                 }
-
                 if (rules.max !== undefined && value > rules.max) {
                     errors[field] = `${field} must be less than or equal to ${rules.max}`
                 }

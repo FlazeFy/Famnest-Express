@@ -55,7 +55,7 @@ export class FeedbackController {
         }
     }
 
-    public postCreateFeedback = async (req: Request, res: Response, next: NextFunction) => {
+    public postCreateFeedbackController = async (req: Request, res: Response, next: NextFunction) => {
         try {
             // Request body
             const { feedback_rate, feedback_body } = req.body
@@ -70,6 +70,24 @@ export class FeedbackController {
             // Success response
             return res.status(201).json({
                 message: "Feedback sended"
+            })
+        } catch (error: any) {
+            next(error)
+        }
+    }
+
+    public hardDeleteFeedbackByIdController = async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            // Param
+            const id = req.params.id as string
+    
+            // Service : Hard delete feedback by id
+            const result = await this.feedbackService.hardDeleteFeedbackByIdService(id)
+            if (!result) throw { code: 404, message: "Feedback not found" }
+    
+            // Success response
+            res.status(200).json({
+                message: "Delete feedback successful",
             })
         } catch (error: any) {
             next(error)

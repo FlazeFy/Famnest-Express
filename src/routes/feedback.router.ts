@@ -15,9 +15,10 @@ export default class FeedbackRouter {
     }
 
     private initializeRoute = () => {
-        const { getAllFeedbackController, getRandomFeedbackController, postCreateFeedback } = this.feedbackController
+        const { getAllFeedbackController, getRandomFeedbackController, postCreateFeedbackController, hardDeleteFeedbackByIdController } = this.feedbackController
 
-        this.route.post("/", verifyAuthToken, authorizeRole(["user"]), validateBodyMiddleware(feedbackSchema), postCreateFeedback)
+        this.route.post("/", verifyAuthToken, authorizeRole(["user"]), validateBodyMiddleware(feedbackSchema), postCreateFeedbackController)
+        this.route.delete("/:id", verifyAuthToken, authorizeRole(["admin"]), hardDeleteFeedbackByIdController)
         this.route.get("/", verifyAuthToken, authorizeRole(["admin","user"]), getAllFeedbackController)
         this.route.get("/random", getRandomFeedbackController)
     }

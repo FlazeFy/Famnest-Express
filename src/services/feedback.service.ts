@@ -27,4 +27,14 @@ export class FeedbackService {
         // Repo : Create feedback
         return await this.feedbackRepo.createFeedbackRepo(feedback_rate, feedback_body, userId)
     }
+
+    public hardDeleteFeedbackByIdService = async (id: string) => {
+        // Repo : Delete feedback by id
+        try {
+            return await this.feedbackRepo.deleteFeedbackByIdRepo(id)
+        } catch (error: any) {
+            if (error.code === "P2025") return null
+            throw error
+        }
+    }
 }
