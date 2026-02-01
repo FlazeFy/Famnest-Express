@@ -62,4 +62,25 @@ export class TaskController {
             next(error)
         }
     }
+
+    public hardDeleteTaskByIdController = async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            // Params
+            const id = req.params.id as string
+
+            // Get user id
+            const { userId, role } = extractUserFromAuthHeader(req.headers.authorization)
+    
+            // Service : Hard delete task
+            const result = await this.taskService.hardDeleteTaskByIdService(userId, id)
+            if (!result) throw { code: 404, message: "Task not found" }
+    
+            // Success response
+            return res.status(200).json({
+                message: "Delete task successful"
+            })
+        } catch (error: any) {
+            next(error)
+        }
+    }
 }

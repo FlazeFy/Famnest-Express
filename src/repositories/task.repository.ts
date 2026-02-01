@@ -98,5 +98,13 @@ export class TaskRepository {
       
         return { data, total }
     }      
+
+    public deleteTaskByIdRepo = async (family_id: string, id: string) => {
+        return await prisma.task.delete({
+            where: { 
+                id, family_id
+            }
+        })
+    }
 }
   
