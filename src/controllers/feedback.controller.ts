@@ -54,4 +54,25 @@ export class FeedbackController {
             next(error)
         }
     }
+
+    public postCreateFeedback = async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            // Request body
+            const { feedback_rate, feedback_body } = req.body
+    
+            // Get user id
+            const { userId } = extractUserFromAuthHeader(req.headers.authorization)
+    
+            // Service : Create feedback
+            const result = await this.feedbackService.postCreateFeedbackService(feedback_rate, feedback_body, userId)
+            if (!result) throw { code: 500, message: "Something went wrong" }
+    
+            // Success response
+            return res.status(201).json({
+                message: "Feedback sended"
+            })
+        } catch (error: any) {
+            next(error)
+        }
+    }
 }

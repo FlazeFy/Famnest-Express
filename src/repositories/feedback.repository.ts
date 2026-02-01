@@ -1,4 +1,5 @@
 import { prisma } from '../configs/prisma'
+import { v4 as uuidv4 } from 'uuid'
 
 export class FeedbackRepository {
     public findAllFeedbackRepo = async (page: number, limit: number, role: String) => {
@@ -40,6 +41,14 @@ export class FeedbackRepository {
         })
 
         return data
+    }
+
+    public createFeedbackRepo = async (feedback_rate: number, feedback_body: string, userId: string) => {
+        return prisma.feedback.create({
+            data: {
+                id: uuidv4(), feedback_rate, feedback_body, created_at: new Date(), created_by: userId,
+            },
+        })
     }
 }
   

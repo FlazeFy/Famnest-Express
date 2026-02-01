@@ -1,6 +1,8 @@
 import { Router } from "express"
 import { FeedbackController } from "../controllers/feedback.controller"
 import { authorizeRole, verifyAuthToken } from "../middlewares/auth.middleware"
+import { validateBodyMiddleware } from "../middlewares/validator.middleware"
+import { feedbackSchema } from "../validators/feedback.validator"
 
 export default class FeedbackRouter {
     private route: Router
@@ -13,8 +15,9 @@ export default class FeedbackRouter {
     }
 
     private initializeRoute = () => {
-        const { getAllFeedbackController, getRandomFeedbackController } = this.feedbackController
+        const { getAllFeedbackController, getRandomFeedbackController, postCreateFeedback } = this.feedbackController
 
+        this.route.post("/", verifyAuthToken, authorizeRole(["user"]), validateBodyMiddleware(feedbackSchema), postCreateFeedback)
         this.route.get("/", verifyAuthToken, authorizeRole(["admin","user"]), getAllFeedbackController)
         this.route.get("/random", getRandomFeedbackController)
     }

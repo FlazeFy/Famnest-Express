@@ -22,4 +22,9 @@ export class FeedbackService {
     
         return res
     }
+    
+    public postCreateFeedbackService = async (feedback_rate: number, feedback_body: string, userId: string) => {
+        // Repo : Create feedback
+        return await this.feedbackRepo.createFeedbackRepo(feedback_rate, feedback_body, userId)
+    }
 }
