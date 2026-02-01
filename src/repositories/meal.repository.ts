@@ -49,5 +49,13 @@ export class MealRepository {
             })
         )
     }
+
+    public deleteMealByIdRepo = async (family_id: string, id: string) => {
+        return await prisma.meal.delete({
+            where: { 
+                id, family_id
+            }
+        })
+    }
 }
   
