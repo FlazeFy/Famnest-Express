@@ -10,6 +10,7 @@ export class QuestionController {
 
     public postQuestionController = async (req: Request, res: Response, next: NextFunction) => {
         try {
+            // Request body
             const { question, email } = req.body
 
             // Service : Send question

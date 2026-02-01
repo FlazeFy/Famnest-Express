@@ -67,6 +67,19 @@ export class FamilyMemberRepository {
             },
             select: { user_id: true }
         })
-    }   
+    }  
+    
+    public findFamilyMemberContactRepo = async (familyId: string) => {
+        return prisma.family_member.findMany({
+            where: {
+                family: { id: familyId }
+            },
+            select: { 
+                user: {
+                    select: { username: true, email: true }
+                }
+            }
+        })
+    }  
 }
   

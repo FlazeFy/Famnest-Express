@@ -28,6 +28,28 @@ export class FamilySleepTimeController {
         }
     }
 
+    public postCreateSleepTimeByIdController = async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            // Request body
+            const { hour_start, hour_end } = req.body
+
+            // Get user id
+            const { userId, role } = extractUserFromAuthHeader(req.headers.authorization)
+    
+            // Service : Create sleep time
+            const result = await this.familySleepTimeService.createFamilySleepTimeService(userId, hour_start, hour_end)
+            if (!result) throw { code: 500, message: "Something went wrong" }
+    
+            // Success response
+            return res.status(201).json({
+                message: "Sleep time created",
+                data: result
+            })
+        } catch (error: any) {
+            next(error)
+        }
+    }
+
     public hardDeleteSleepTimeByIdController = async (req: Request, res: Response, next: NextFunction) => {
         try {
             // Get user id
