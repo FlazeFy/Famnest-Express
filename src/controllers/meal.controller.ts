@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express"
 import { MealService } from "../services/meal.service"
-import { extractUserFromAuthHeader } from "../utils/auth.util"
+import { extractUserFromLocals } from "../utils/auth.util"
 
 export class MealController {
     private mealService: MealService
@@ -12,7 +12,7 @@ export class MealController {
     public getAllMealController = async (req: Request, res: Response, next: NextFunction) => {
         try {
             // Get user id
-            const { userId } = extractUserFromAuthHeader(req.headers.authorization)
+            const { userId } = extractUserFromLocals(res)
     
             // Service : Get all meal
             const result = await this.mealService.getAllMealService(userId)
@@ -34,7 +34,7 @@ export class MealController {
             const id = req.params.id as string
 
             // Get user id
-            const { userId, role } = extractUserFromAuthHeader(req.headers.authorization)
+            const { userId, role } = extractUserFromLocals(res)
     
             // Service : Hard delete meal
             const result = await this.mealService.hardDeleteMealByIdService(userId, id)

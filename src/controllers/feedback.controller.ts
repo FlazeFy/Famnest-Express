@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express"
 import { FeedbackService } from "../services/feedback.service"
-import { extractUserFromAuthHeader } from "../utils/auth.util"
+import { extractUserFromLocals } from "../utils/auth.util"
 
 export class FeedbackController {
     private feedbackService: FeedbackService
@@ -16,7 +16,7 @@ export class FeedbackController {
             const limit = Number(req.query.limit) || 14
 
             // Get user id
-            const { userId, role } = extractUserFromAuthHeader(req.headers.authorization)
+            const { userId, role } = extractUserFromLocals(res)
             if (!role) throw { code: 404, message: "Role not valid" }
     
             // Service : Get all feedback
@@ -61,7 +61,7 @@ export class FeedbackController {
             const { feedback_rate, feedback_body } = req.body
     
             // Get user id
-            const { userId } = extractUserFromAuthHeader(req.headers.authorization)
+            const { userId } = extractUserFromLocals(res)
     
             // Service : Create feedback
             const result = await this.feedbackService.postCreateFeedbackService(feedback_rate, feedback_body, userId)

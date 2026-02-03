@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express"
 import { HistoryService } from "../services/history.service"
-import { extractUserFromAuthHeader } from "../utils/auth.util"
+import { extractUserFromLocals } from "../utils/auth.util"
 import { validate as isUuid } from "uuid"
 
 export class HistoryController {
@@ -17,7 +17,7 @@ export class HistoryController {
             const limit = Number(req.query.limit) || 14
     
             // Get user id
-            const { userId, role } = extractUserFromAuthHeader(req.headers.authorization)
+            const { userId, role } = extractUserFromLocals(res)
     
             // Service : Get all history
             const result = await this.historyService.getAllHistoryService(page, limit, role === "user" ? userId : null)
@@ -45,7 +45,7 @@ export class HistoryController {
             if (!isUuid(id)) throw { code: 400, message: "Invalid UUID format" }
     
             // Get user id
-            const { userId } = extractUserFromAuthHeader(req.headers.authorization)
+            const { userId } = extractUserFromLocals(res)
     
             // Service : Hard delete history by id
             const result = await this.historyService.hardDeleteHistoryByIdService(id as string, userId)

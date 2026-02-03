@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express"
 import { FamilyMemberService } from "../services/family_member.service"
-import { extractUserFromAuthHeader } from "../utils/auth.util"
+import { extractUserFromLocals } from "../utils/auth.util"
 
 export class FamilyMemberController {
     private familyMemberService: FamilyMemberService
@@ -16,7 +16,7 @@ export class FamilyMemberController {
             const limit = Number(req.query.limit) || 14
     
             // Get user id
-            const { userId, role } = extractUserFromAuthHeader(req.headers.authorization)
+            const { userId, role } = extractUserFromLocals(res)
     
             // Service : Get all family member
             const result = await this.familyMemberService.getAllFamilyMemberService(page, limit, userId)

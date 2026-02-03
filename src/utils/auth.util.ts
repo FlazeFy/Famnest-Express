@@ -12,16 +12,12 @@ export const hashPassword = async (password: string) => {
     return await hash(password, salt)
 }
 
-export const extractUserFromAuthHeader = (authHeader?: string) => {
-    if (!authHeader) throw new Error("Authorization header missing")
+export const extractUserFromLocals = (res: any) => {
+    const user = res.locals.decrypt
+    if (!user) throw { code: 401, message: "Unauthorized" }
 
-    const token = authHeader.split(" ")[1]
-    if (!token) throw new Error("Token missing")
+    const payload = user as JwtPayload
 
-    const decoded = jwt.verify(token,process.env.SECRET || "secret")
-    if (typeof decoded === "string" || !("id" in decoded)) throw new Error("Invalid token payload")
-
-    const payload = decoded as JwtPayload
     return {
         userId: payload.id,
         role: payload.role ?? null,

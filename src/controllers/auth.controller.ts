@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from "express"
 import { AdminService } from "../services/admin.service"
 import { AuthService } from "../services/auth.service"
 import { UserService } from "../services/user.service"
-import { extractUserFromAuthHeader } from "../utils/auth.util"
+import { extractUserFromLocals } from "../utils/auth.util"
 
 export class AuthController {
     private authService: AuthService
@@ -59,7 +59,7 @@ export class AuthController {
     public getMyProfile = async (req: Request, res: Response, next: NextFunction) => {
         try {
             // Get user id
-            const { userId, role } = extractUserFromAuthHeader(req.headers.authorization)
+            const { userId, role } = extractUserFromLocals(res)
             let result 
     
             switch (role) {

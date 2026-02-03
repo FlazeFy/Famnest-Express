@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express"
 import { TaskService } from "../services/task.service"
-import { extractUserFromAuthHeader } from "../utils/auth.util"
+import { extractUserFromLocals } from "../utils/auth.util"
 import { formatDateTime } from "../utils/converter"
 
 export class TaskController {
@@ -17,7 +17,7 @@ export class TaskController {
             const limit = Number(req.query.limit) || 14
 
             // Get user id
-            const { userId, role } = extractUserFromAuthHeader(req.headers.authorization)
+            const { userId, role } = extractUserFromLocals(res)
     
             // Service : Get all task
             const result = await this.taskService.getAllTaskService(page, limit, role === "user" ? userId : null)
@@ -44,7 +44,7 @@ export class TaskController {
             const currentDate = typeof req.query.current_date === 'string' ? req.query.current_date.trim() : formatDateTime(new Date())
 
             // Get user id
-            const { userId, role } = extractUserFromAuthHeader(req.headers.authorization)
+            const { userId, role } = extractUserFromLocals(res)
     
             // Service : Get all task
             const result = await this.taskService.getIncomingTaskService(page, limit, role === "user" ? userId : null, currentDate)
@@ -69,7 +69,7 @@ export class TaskController {
             const id = req.params.id as string
 
             // Get user id
-            const { userId, role } = extractUserFromAuthHeader(req.headers.authorization)
+            const { userId, role } = extractUserFromLocals(res)
     
             // Service : Hard delete task
             const result = await this.taskService.hardDeleteTaskByIdService(userId, id)

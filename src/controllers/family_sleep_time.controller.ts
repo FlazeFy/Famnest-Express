@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express"
 import { FamilySleepTimeService } from "../services/family_sleep_time.service"
-import { extractUserFromAuthHeader } from "../utils/auth.util"
+import { extractUserFromLocals } from "../utils/auth.util"
 
 export class FamilySleepTimeController {
     private familySleepTimeService: FamilySleepTimeService
@@ -12,7 +12,7 @@ export class FamilySleepTimeController {
     public getFamilySleepTimeController = async (req: Request, res: Response, next: NextFunction) => {
         try {
             // Get user id
-            const { userId, role } = extractUserFromAuthHeader(req.headers.authorization)
+            const { userId, role } = extractUserFromLocals(res)
     
             // Service : Get family sleep time
             const result = await this.familySleepTimeService.getFamilySleepTimeService(userId)
@@ -34,7 +34,7 @@ export class FamilySleepTimeController {
             const { hour_start, hour_end } = req.body
 
             // Get user id
-            const { userId, role } = extractUserFromAuthHeader(req.headers.authorization)
+            const { userId, role } = extractUserFromLocals(res)
     
             // Service : Create sleep time
             const result = await this.familySleepTimeService.createFamilySleepTimeService(userId, hour_start, hour_end)
@@ -53,7 +53,7 @@ export class FamilySleepTimeController {
     public hardDeleteSleepTimeByIdController = async (req: Request, res: Response, next: NextFunction) => {
         try {
             // Get user id
-            const { userId, role } = extractUserFromAuthHeader(req.headers.authorization)
+            const { userId, role } = extractUserFromLocals(res)
     
             // Service : Hard delete sleep time
             const result = await this.familySleepTimeService.hardDeleteFamilySleepTimeService(userId)

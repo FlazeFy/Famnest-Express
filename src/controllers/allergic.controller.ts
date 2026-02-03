@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express"
 import { AllergicService } from "../services/allergic.service"
 import { validate as isUuid } from "uuid"
-import { extractUserFromAuthHeader } from "../utils/auth.util"
+import { extractUserFromLocals } from "../utils/auth.util"
 
 export class AllergicController {
     private allergicService: AllergicService
@@ -17,7 +17,7 @@ export class AllergicController {
             const limit = Number(req.query.limit) || 14
 
             // Get user id
-            const { userId, role } = extractUserFromAuthHeader(req.headers.authorization)
+            const { userId, role } = extractUserFromLocals(res)
     
             // Service : Get all allergic
             const result = await this.allergicService.getAllAllergicService(page, limit, role === "user" ? userId : null)
@@ -45,7 +45,7 @@ export class AllergicController {
             if (!isUuid(id)) throw { code: 400, message: "Invalid UUID format" }
 
             // Get user id
-            const { userId, role } = extractUserFromAuthHeader(req.headers.authorization)
+            const { userId, role } = extractUserFromLocals(res)
     
             // Service : Hard delete allergic by id
             const result = await this.allergicService.hardDeleteAllergicByIdService(id, role === "user" ? userId : null)
