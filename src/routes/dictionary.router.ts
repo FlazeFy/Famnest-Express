@@ -1,6 +1,8 @@
 import { Router } from "express"
 import { DictionaryController } from "../controllers/dictionary.controller"
 import { authorizeRole, verifyAuthToken } from "../middlewares/auth.middleware"
+import { validateBodyMiddleware } from "../middlewares/validator.middleware"
+import { dictionarySchema } from "../validators/dictionary.validator"
 
 export default class DictionaryRouter {
     private route: Router
@@ -13,9 +15,10 @@ export default class DictionaryRouter {
     }
 
     private initializeRoute = () => {
-        const { getAllDictionary, hardDeleteDictionaryByIdController } = this.dictionaryController
+        const { getAllDictionary, hardDeleteDictionaryByIdController, postCreateDictionaryController } = this.dictionaryController
 
         this.route.get("/", getAllDictionary)
+        this.route.post("/", verifyAuthToken, authorizeRole(["admin"]), validateBodyMiddleware(dictionarySchema), postCreateDictionaryController)
         this.route.delete("/:id", verifyAuthToken, authorizeRole(['admin']), hardDeleteDictionaryByIdController)
     }
 

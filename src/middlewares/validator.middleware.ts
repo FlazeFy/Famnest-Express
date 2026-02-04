@@ -5,6 +5,7 @@ type FieldRule = {
     min?: number
     max?: number
     isEmail?: boolean
+    alloweds?: string[]
 }
 
 export type ValidatorSchema = Record<string, FieldRule>
@@ -47,6 +48,9 @@ export const validateBodyMiddleware = (schema: ValidatorSchema) => {
                 }
                 if (rules.isEmail && !GMAIL_REGEX.test(value)) {
                     errors[field] = `email must be a valid gmail address`
+                }
+                if (rules.alloweds && !rules.alloweds.includes(value)) {
+                    errors[field] = `${field} must be one of: ${rules.alloweds.join(", ")}`
                 }
             }
 

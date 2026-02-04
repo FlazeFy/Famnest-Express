@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express"
 import { DictionaryService } from "../services/dictionary.service"
 import { validate as isUuid } from "uuid"
+import { extractUserFromLocals } from "../utils/auth.util"
 
 export class DictionaryController {
     private dictionaryService: DictionaryService
@@ -26,6 +27,24 @@ export class DictionaryController {
                 meta: {
                     page, limit, total: result.total, total_page: Math.ceil(result.total / limit),
                 },
+            })
+        } catch (error: any) {
+            next(error)
+        }
+    }
+
+    public postCreateDictionaryController = async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            // Request body
+            const { dictionary_name, dictionary_type, dictionary_desc } = req.body
+    
+            // Service : Create dictionary
+            const result = await this.dictionaryService.postCreateDictionaryService(dictionary_name, dictionary_type, dictionary_desc)
+            if (!result) throw { code: 500, message: "Something went wrong" }
+    
+            // Success response
+            return res.status(201).json({
+                message: "Dictionary created"
             })
         } catch (error: any) {
             next(error)

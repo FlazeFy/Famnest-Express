@@ -1,4 +1,5 @@
 import { prisma } from '../configs/prisma'
+import { v4 as uuidv4 } from 'uuid'
 
 export class DictionaryRepository {
     public findAllDictionaryRepo = async (page: number, limit: number) => {
@@ -36,6 +37,20 @@ export class DictionaryRepository {
 
     public findDictionaryByIdRepo = async (id: string) => {
         return prisma.dictionary.findUnique({ where: { id } })
+    }
+
+    public findDictionaryByNameAndTypeRepo = async (dictionary_name: string, dictionary_type: string) => {
+        return prisma.dictionary.findFirst({
+            where: { dictionary_name, dictionary_type }
+        })
+    }
+
+    public createDictionaryRepo = async (dictionary_name: string, dictionary_type: string, dictionary_desc: string | null) => {
+        return prisma.dictionary.create({
+            data: {
+                id: uuidv4(), dictionary_name, dictionary_type, dictionary_desc,
+            },
+        })
     }
     
     public deleteDictionaryByIdRepo = async (id: string) => {

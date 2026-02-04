@@ -15,6 +15,15 @@ export class DictionaryService {
         return res
     }
 
+    public postCreateDictionaryService = async (dictionary_name: string, dictionary_type: string, dictionary_desc: string | null) => {
+        // Repo : Find dictionary by dictionary name and dictionary type
+        const isExist = await this.dictionaryRepo.findDictionaryByNameAndTypeRepo(dictionary_name, dictionary_type)
+        if (isExist) throw { code: 409, message: 'Dictionary is already exist' }
+        
+        // Repo : Create dictionary
+        return await this.dictionaryRepo.createDictionaryRepo(dictionary_name, dictionary_type, dictionary_desc)
+    }
+
     public hardDeleteDictionaryByIdService = async (id: string) => {
         // Repo : Check if dictionary exist
         const dictionary = await this.dictionaryRepo.findDictionaryByIdRepo(id)
