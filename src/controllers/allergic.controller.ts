@@ -36,6 +36,27 @@ export class AllergicController {
         }
     }
 
+    public postCreateAllergic = async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            // Request body
+            const { allergic_context, allergic_desc } = req.body
+    
+            // Get user id
+            const { userId } = extractUserFromLocals(res)
+    
+            // Service : Create feedback
+            const result = await this.allergicService.postCreateAllergicService(allergic_context, allergic_desc, userId)
+            if (!result) throw { code: 500, message: "Something went wrong" }
+    
+            // Success response
+            return res.status(201).json({
+                message: "Allergic created"
+            })
+        } catch (error: any) {
+            next(error)
+        }
+    }
+
     public hardDeleteAllergicByIdController = async (req: Request, res: Response, next: NextFunction) => {
         try {
             // Param

@@ -25,4 +25,13 @@ export class AllergicService {
     
         return allergic
     }
+
+    public postCreateAllergicService = async (allergic_context: string, allergic_desc: string, userId: string) => {
+        // Repo : Find allergic by allergic context and user id
+        const isExist = await this.allergicRepo.findAllergicByContextAndUserIdRepo(allergic_context, userId)
+        if (isExist) throw { code: 409, message: 'Allergic is already exist' }
+        
+        // Repo : Create allergic
+        return await this.allergicRepo.createAllergicRepo(allergic_context, allergic_desc, userId)
+    }
 }

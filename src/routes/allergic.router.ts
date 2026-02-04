@@ -1,6 +1,8 @@
 import { Router } from "express"
 import { AllergicController } from "../controllers/allergic.controller"
 import { authorizeRole, verifyAuthToken } from "../middlewares/auth.middleware"
+import { validateBodyMiddleware } from "../middlewares/validator.middleware"
+import { allergicSchema } from "../validators/allergic.validator"
 
 export default class AllergicRouter {
     private route: Router
@@ -13,10 +15,11 @@ export default class AllergicRouter {
     }
 
     private initializeRoute = () => {
-        const { getAllAllergicController, hardDeleteAllergicByIdController } = this.allergicController
+        const { getAllAllergicController, hardDeleteAllergicByIdController, postCreateAllergic } = this.allergicController
 
         this.route.get("/", verifyAuthToken, authorizeRole(["admin","user"]), getAllAllergicController)
-        this.route.delete("/:id", verifyAuthToken, authorizeRole(["admin","user"]), hardDeleteAllergicByIdController)
+        this.route.post("/", verifyAuthToken, authorizeRole(["user"]), validateBodyMiddleware(allergicSchema), postCreateAllergic)
+        this.route.delete("/:id", verifyAuthToken, authorizeRole(["user"]), hardDeleteAllergicByIdController)
     }
 
     public getRouter = (): Router => {
