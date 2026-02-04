@@ -44,7 +44,7 @@ export class AllergicController {
             // Get user id
             const { userId } = extractUserFromLocals(res)
     
-            // Service : Create feedback
+            // Service : Create allergic
             const result = await this.allergicService.postCreateAllergicService(allergic_context, allergic_desc, userId)
             if (!result) throw { code: 500, message: "Something went wrong" }
     

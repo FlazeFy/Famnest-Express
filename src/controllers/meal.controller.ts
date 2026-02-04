@@ -28,6 +28,27 @@ export class MealController {
         }
     }
 
+    public postCreateMealController = async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            // Request body
+            const { meal_name, meal_desc, meal_time, meal_day } = req.body
+    
+            // Get user id
+            const { userId } = extractUserFromLocals(res)
+    
+            // Service : Create meal
+            const result = await this.mealService.postCreateMealService(meal_name, meal_desc, meal_time, meal_day, userId)
+            if (!result) throw { code: 500, message: "Something went wrong" }
+    
+            // Success response
+            return res.status(201).json({
+                message: "Meal created"
+            })
+        } catch (error: any) {
+            next(error)
+        }
+    }
+
     public hardDeleteMealByIdController = async (req: Request, res: Response, next: NextFunction) => {
         try {
             // Params

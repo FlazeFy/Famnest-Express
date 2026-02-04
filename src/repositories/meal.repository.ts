@@ -1,4 +1,6 @@
 import { prisma } from '../configs/prisma'
+import { DayName, MealTime } from '../generated/prisma/enums'
+import { v4 as uuidv4 } from 'uuid'
 
 export class MealRepository {
     public findRandomMealByFamilyIdRepo = async (familyId: string) => {
@@ -48,6 +50,20 @@ export class MealRepository {
                 prepare_by: meal.meal_prepare_bys.map((dt) => dt.user_prepare.fullname).join(', ')
             })
         )
+    }
+
+    public findMealByNameDayTimeFamilyIdRepo = async (meal_name: string, meal_day: DayName, meal_time: MealTime, family_id: string) => {
+        return prisma.meal.findFirst({
+            where: { meal_name, meal_day, meal_time, family_id }
+        })
+    }
+
+    public createMealRepo = async (meal_name: string, meal_desc: string | null, meal_day: DayName, meal_time: MealTime, family_id: string, userId: string) => {
+        return prisma.meal.create({
+            data: {
+                id: uuidv4(), meal_name, meal_desc, meal_day, meal_time, created_at: new Date(), created_by: userId, family_id
+            },
+        })
     }
 
     public deleteMealByIdRepo = async (family_id: string, id: string) => {
