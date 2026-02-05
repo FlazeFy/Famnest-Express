@@ -24,6 +24,16 @@ enum Gender {
   female
 }
 
+enum CashFlowType { 
+  personal 
+  shared
+}
+
+enum CashFlowCategory { 
+  income 
+  spending
+}
+
 enum DayName {
   sun
   mon
@@ -80,6 +90,7 @@ model user {
   family_members        family_member[]
   family_sleep_time     family_sleep_time[]
   meals                 meal[]
+  cash_flows            cash_flow[]
   meal_assigne          meal_prepare_by[] @relation("AssigneMeal")
   meal_prepare          meal_prepare_by[] @relation("PrepareMeal")
   task_assigns_created  task_assign[] @relation("TaskAssignCreator")
@@ -317,4 +328,21 @@ model meal_prepare_by {
   meal          meal  @relation(fields: [meal_id], references: [id])
   user_assigne  user  @relation("AssigneMeal", fields: [created_by], references: [id])
   user_prepare  user  @relation("PrepareMeal", fields: [prepare_by], references: [id])
+}
+
+model cash_flow {
+  id              String            @id @db.Char(36)
+  moneh_id        String?           @db.Char(36)
+  flow_type       CashFlowType
+  flow_context    String            @db.Char(75)
+  flow_desc       String?           @db.Char(255)
+  flow_category   CashFlowCategory
+  flow_amount     Int               @db.Integer
+  tags            String[] 
+  created_at      DateTime          @default(now()) @db.Timestamptz(6)
+  updated_at      DateTime          @updatedAt @db.Timestamptz(6)
+  created_by      String            @db.Char(36)
+
+  // Relations
+  user    user @relation(fields: [created_by], references: [id])
 }
