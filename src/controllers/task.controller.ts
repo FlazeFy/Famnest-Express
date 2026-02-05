@@ -63,6 +63,30 @@ export class TaskController {
         }
     }
 
+    public getTotalDailyTaskController = async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            // Query params
+            const currentDate = typeof req.query.current_date === 'string' ? req.query.current_date.trim() : formatDateTime(new Date())
+
+            // Get user id
+            const { userId, role } = extractUserFromLocals(res)
+    
+            // Service : Get all task
+            const result = await this.taskService.getTotalDailyTaskService(role === "user" ? userId : null, currentDate)
+            if (!result) throw { code: 404, message: "Task not found" }
+    
+            // Success response
+            return res.status(200).json({
+                message: "Get task successful",
+                data: result.data,
+                total: result.total,
+                average: result.average
+            })
+        } catch (error: any) {
+            next(error)
+        }
+    }
+
     public hardDeleteTaskByIdController = async (req: Request, res: Response, next: NextFunction) => {
         try {
             // Params

@@ -31,6 +31,21 @@ export class TaskService {
         return res
     }
 
+    public getTotalDailyTaskService = async (userId: string | null, currentDate: string) => {
+        let familyId: string | null =  null
+
+        if (userId) {
+            // Repo : Find family id by user id
+            const family = await this.familyRepo.findFamilyByUserIdRepo(userId)
+            if (!family) return null
+
+            familyId = family.id
+        }
+
+        // Repo : Sum task per day
+        return await this.taskRepo.sumTaskLastWeekRepo(familyId, currentDate)
+    }
+
     public getIncomingTaskService = async (page: number, limit: number, userId: string | null, currentDate: string) => {
         let familyId: string | null =  null
 

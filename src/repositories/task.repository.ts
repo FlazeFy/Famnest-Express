@@ -97,7 +97,64 @@ export class TaskRepository {
         ])
       
         return { data, total }
-    }      
+    } 
+    
+    public sumTaskLastWeekRepo = async (familyId: string | null, currentDate: string) => {
+        const nDays = 7
+        const endDate = new Date(currentDate)
+        endDate.setHours(23, 59, 59, 999)
+        const startDate = new Date(endDate)
+        startDate.setDate(startDate.getDate() - (nDays - 1))
+        startDate.setHours(0, 0, 0, 0)
+
+        const tasks = await prisma.task.findMany({
+            where: {
+                ...(familyId ? { family_id: familyId } : {}),
+                start_date: {
+                    not: null,
+                    gte: startDate,
+                    lte: endDate
+                }
+            },
+            select: {
+                start_date: true
+            }
+        })
+
+        const map = new Map<string, number>()
+
+        // Aggregate
+        for (const task of tasks) {
+            if (!task.start_date) continue
+            const key = task.start_date.toISOString().slice(0, 10)
+            map.set(key, (map.get(key) ?? 0) + 1)
+        }
+
+        const data: { context: string; total: number }[] = []
+        let total = 0
+
+        // Ensure all days exist
+        for (let i = 0; i < nDays; i++) {
+            const d = new Date(endDate)
+            d.setDate(endDate.getDate() - i)
+
+            const key = d.toISOString().slice(0, 10)
+            const count = map.get(key) ?? 0
+
+            total += count
+
+            data.push({
+                context: d.toLocaleDateString('en-GB', {
+                    day: '2-digit',
+                    month: 'short',
+                    year: '2-digit'
+                }),
+                total: count
+            })
+        }
+
+        return { data, total, average: Number((total / nDays).toFixed(2)) }
+    } 
 
     public deleteTaskByIdRepo = async (family_id: string, id: string) => {
         return await prisma.task.delete({
