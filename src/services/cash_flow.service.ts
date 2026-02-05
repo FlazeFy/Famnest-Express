@@ -1,5 +1,7 @@
 import { FamilyRepository } from "../repositories/family.repository"
 import { CashFlowRepository } from "../repositories/cash_flow.repository"
+import { formatDateTime } from "../utils/converter"
+import { CashFlowCategory, CashFlowType } from "../generated/prisma/enums"
 
 export class CashFlowService {
     private cashFlowRepo: CashFlowRepository
@@ -41,6 +43,23 @@ export class CashFlowService {
 
         // Repo : Sum cash flow per day
         return await this.cashFlowRepo.sumCashFlowLastWeekRepo(familyId, currentDate)
+    }
+
+    public getTotalCashFlowPerCategoryService = async (userId: string) => {
+        let familyId: string 
+
+        // Repo : Find family id by user id
+        const family = await this.familyRepo.findFamilyByUserIdRepo(userId)
+        if (!family) return null
+
+        familyId = family.id
+
+        // Repo : Sum cash flow per day
+        const income = await this.cashFlowRepo.sumCashFlowForEveryMemberRepo(familyId, CashFlowCategory.income)
+        const spending = await this.cashFlowRepo.sumCashFlowForEveryMemberRepo(familyId, CashFlowCategory.spending)
+        const comparison = await this.cashFlowRepo.sumCashFlowByCategoryRepo(familyId)
+        
+        return { income, spending, comparison }
     }
 
     public hardDeleteCashFlowByIdService = async (id: string, userId: string) => {

@@ -60,6 +60,29 @@ export class CashFlowController {
         }
     }
 
+    public getTotalCashFlowPerCategoryController = async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            // Get user id
+            const { userId } = extractUserFromLocals(res)
+    
+            // Service : Get all cash flow
+            const result = await this.cashFlowService.getTotalCashFlowPerCategoryService(userId)
+            if (!result) throw { code: 404, message: "Cash flow not found" }
+    
+            // Success response
+            return res.status(200).json({
+                message: "Get cash flow successful",
+                data: {
+                    spending: result.spending, 
+                    income: result.income,
+                    comparison: result.comparison
+                }
+            })
+        } catch (error: any) {
+            next(error)
+        }
+    }
+
     public hardDeleteCashFlowByIdController = async (req: Request, res: Response, next: NextFunction) => {
         try {
             // Params

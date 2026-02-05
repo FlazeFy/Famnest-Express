@@ -14,7 +14,7 @@ export class FamilyMemberRepository {
                     select: {
                         id: true, family_relation: true,
                         user: {
-                            select: { id: true, username: true, fullname: true, born_at: true, profile_image: true }
+                            omit: { deleted_at: true, password: true }
                         }  
                     },
                     orderBy: { user: { fullname: 'asc' } }

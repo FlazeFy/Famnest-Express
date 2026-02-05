@@ -13,11 +13,12 @@ export default class CashFlowRouter {
     }
 
     private initializeRoute = () => {
-        const { getTotalDailyCashFlowController, getAllCashFlowController, hardDeleteCashFlowByIdController } = this.cashFlowController
+        const { getTotalDailyCashFlowController, getAllCashFlowController, getTotalCashFlowPerCategoryController, hardDeleteCashFlowByIdController } = this.cashFlowController
 
         this.route.get("/", verifyAuthToken, authorizeRole(["admin","user"]), getAllCashFlowController)
         this.route.delete("/:id", verifyAuthToken, authorizeRole(["user"]), hardDeleteCashFlowByIdController)
         this.route.get("/total", verifyAuthToken, authorizeRole(["admin","user"]), getTotalDailyCashFlowController)
+        this.route.get("/by_category", verifyAuthToken, authorizeRole(["user"]), getTotalCashFlowPerCategoryController)
     }
 
     public getRouter = (): Router => {

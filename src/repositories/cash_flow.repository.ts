@@ -1,4 +1,6 @@
 import { prisma } from '../configs/prisma'
+import { CashFlowCategory } from '../generated/prisma/enums'
+import { dayKey, dayLabel, getLast7Days, getLast7Months, monthKey, monthLabel } from '../utils/generator.util'
 
 export class CashFlowRepository {
     public findAllCashFlowRepo = async (page: number, limit: number, familyId: string | null) => {
@@ -99,6 +101,80 @@ export class CashFlowRepository {
 
         return { data, total, average: Number((total / nDays).toFixed(2)) }
     } 
+
+    public sumCashFlowForEveryMemberRepo = async (familyId: string, flowCategory: CashFlowCategory) => {
+        const isIncome = flowCategory === CashFlowCategory.income
+    
+        // Set date range
+        const ranges = isIncome ? getLast7Months() : getLast7Days()
+        const keys = ranges.map(isIncome ? monthKey : dayKey)
+        const categories = ranges.map(isIncome ? monthLabel : dayLabel)
+    
+        const startDate = ranges[0]
+        const endDate = new Date()
+        endDate.setHours(23, 59, 59, 999)
+    
+        // Query
+        const rows = await prisma.cash_flow.findMany({
+            where: {
+                flow_category: isIncome ? CashFlowCategory.income : CashFlowCategory.spending,
+                created_at: {
+                    gte: startDate,
+                    lte: endDate,
+                },
+                user: {
+                    family_members: {
+                        some: { family_id: familyId },
+                    },
+                },
+            },
+            select: {
+                flow_amount: true,
+                created_at: true,
+                user: { select: { fullname: true } },
+            },
+        })
+    
+        const map: Record<string, Record<string, number>> = {}
+    
+        for (const row of rows) {
+            const key = (isIncome ? monthKey : dayKey)(row.created_at)
+            if (!keys.includes(key)) continue
+    
+            // Group by fullname
+            const name = row.user.fullname
+            map[name] ??= Object.fromEntries(keys.map(k => [k, 0]))
+            map[name][key] += row.flow_amount
+        }
+    
+        // Put with label
+        return {
+            categories,
+            series: Object.entries(map).map(([context, values]) => ({
+                context,
+                data: keys.map(k => values[k]),
+            })),
+        }
+    }
+
+    public sumCashFlowByCategoryRepo = async (familyId: string) => {
+        const data = await prisma.cash_flow.groupBy({
+            by: ['flow_category'],
+            _sum: { flow_amount: true },
+            where: {
+                user: {
+                    family_members: {
+                        some: { family_id: familyId },
+                    },
+                },
+            },
+        })
+        
+        return data.map(item => ({
+            context: item.flow_category,
+            total: item._sum.flow_amount ?? 0,
+        }))
+    }
 
     public deleteCashFlowByIdRepo = async (id: string, created_by: string) => {
         return await prisma.cash_flow.delete({
