@@ -20,7 +20,7 @@ export class CashFlowRepository {
                     id: true, flow_type: true, flow_context: true, flow_desc: true, flow_category: true, flow_amount: true, tags: true, created_at: true, updated_at: true,
                     user: {
                         select: {
-                            id: true, username: true
+                            id: true, username: true, fullname: true
                         }
                     }
                 },
@@ -99,5 +99,13 @@ export class CashFlowRepository {
 
         return { data, total, average: Number((total / nDays).toFixed(2)) }
     } 
+
+    public deleteCashFlowByIdRepo = async (id: string, created_by: string) => {
+        return await prisma.cash_flow.delete({
+            where: { 
+                id, created_by
+            }
+        })
+    }
 }
   

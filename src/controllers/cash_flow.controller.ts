@@ -59,4 +59,25 @@ export class CashFlowController {
             next(error)
         }
     }
+
+    public hardDeleteCashFlowByIdController = async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            // Params
+            const id = req.params.id as string
+
+            // Get user id
+            const { userId, role } = extractUserFromLocals(res)
+    
+            // Service : Hard delete cash flow
+            const result = await this.cashFlowService.hardDeleteCashFlowByIdService(id, userId)
+            if (!result) throw { code: 404, message: "Cash flow not found" }
+    
+            // Success response
+            return res.status(200).json({
+                message: "Delete cash flow successful"
+            })
+        } catch (error: any) {
+            next(error)
+        }
+    }
 }

@@ -42,4 +42,14 @@ export class CashFlowService {
         // Repo : Sum cash flow per day
         return await this.cashFlowRepo.sumCashFlowLastWeekRepo(familyId, currentDate)
     }
+
+    public hardDeleteCashFlowByIdService = async (id: string, userId: string) => {
+        // Repo : Delete cash flow by id
+        try {
+            return await this.cashFlowRepo.deleteCashFlowByIdRepo(id, userId)
+        } catch (error: any) {
+            if (error.code === "P2025") return null
+            throw error
+        }
+    }
 }
