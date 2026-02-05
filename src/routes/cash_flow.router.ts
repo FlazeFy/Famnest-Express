@@ -13,8 +13,9 @@ export default class CashFlowRouter {
     }
 
     private initializeRoute = () => {
-        const { getTotalDailyCashFlowController } = this.cashFlowController
+        const { getTotalDailyCashFlowController, getAllCashFlowController } = this.cashFlowController
 
+        this.route.get("/", verifyAuthToken, authorizeRole(["admin","user"]), getAllCashFlowController)
         this.route.get("/total", verifyAuthToken, authorizeRole(["admin","user"]), getTotalDailyCashFlowController)
     }
 

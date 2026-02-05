@@ -53,7 +53,9 @@ export class TaskRepository {
                     { due_date: "asc" },
                 ]
             }),
-            prisma.task.count(),
+            prisma.task.count({
+                where: whereClause
+            }),
         ])
 
         return { data, total }

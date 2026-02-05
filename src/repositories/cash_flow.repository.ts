@@ -1,6 +1,39 @@
 import { prisma } from '../configs/prisma'
 
 export class CashFlowRepository {
+    public findAllCashFlowRepo = async (page: number, limit: number, familyId: string | null) => {
+        const skip = (page - 1) * limit
+        const whereClause = familyId ?{
+            user: {
+                family_members: {
+                    some: { family_id: familyId }
+                }
+            }
+        } : undefined
+
+        const [data, total] = await Promise.all([
+            prisma.cash_flow.findMany({
+                where: whereClause,
+                skip,
+                take: limit,
+                select: {
+                    id: true, flow_type: true, flow_context: true, flow_desc: true, flow_category: true, flow_amount: true, tags: true, created_at: true, updated_at: true,
+                    user: {
+                        select: {
+                            id: true, username: true
+                        }
+                    }
+                },
+                orderBy: { created_at: "desc" }
+            }),
+            prisma.cash_flow.count({ 
+                where: whereClause
+            }),
+        ])
+
+        return { data, total }
+    }
+
     public sumCashFlowLastWeekRepo = async (familyId: string | null, currentDate: string) => {
         const nDays = 7
         const endDate = new Date(currentDate)
