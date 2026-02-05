@@ -13,6 +13,7 @@ import TaskRouter from "./routes/task.router"
 import { auditError } from "./utils/audit.util"
 import FamilyMemberRouter from "./routes/family_member.router"
 import FamilySleepTimeRouter from "./routes/family_sleep_time.router"
+import CashFlowRouter from "./routes/cash_flow.router"
 
 const PORT = process.env.PORT
 
@@ -47,10 +48,12 @@ class App {
         const taskRouter = new TaskRouter()
         const familyMemberRouter = new FamilyMemberRouter()
         const familySleepTimeRouter = new FamilySleepTimeRouter()
+        const cashFlowRouter = new CashFlowRouter()
         const authRouter = new AuthRouter()
         this.app.use("/api/v1/dictionaries", dictionaryRouter.getRouter())
         this.app.use("/api/v1/auths", authRouter.getRouter())
         this.app.use("/api/v1/allergics", allergicRouter.getRouter())
+        this.app.use("/api/v1/cash_flows", cashFlowRouter.getRouter())
         this.app.use("/api/v1/histories", historyRouter.getRouter())
         this.app.use("/api/v1/feedbacks", feedbackRouter.getRouter())
         this.app.use("/api/v1/questions", questionRouter.getRouter())
