@@ -18,6 +18,22 @@ export class HistoryRepository {
         return { data, total }
     }
 
+    public findAllHistoryExportRepo = async (userId: string | null) => {
+        const where = userId ? { created_by: userId } : {}
+        return prisma.history.findMany({
+            where,
+            orderBy: {
+                created_at: 'desc'
+            },
+            select: {
+                history_type: true, history_context: true, created_at: true,
+                user: !userId ? {
+                    select: { username: true }
+                } : {}
+            }
+        })
+    }
+
     public hardDeleteHistoryByIdRepo = async (id: string, userId: string) => {
         return prisma.history.deleteMany({
             where: { id, created_by: userId},

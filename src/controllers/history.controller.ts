@@ -60,4 +60,23 @@ export class HistoryController {
             next(error)
         }
     }
+
+    // Export dataset controller
+    public exportHistoryController = async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            // Get user id
+            const { userId, role } = extractUserFromLocals(res)
+    
+            // Service : Export history as CSV
+            const result = await this.historyService.exportAllHistoryService(role === "user" ? userId : null)
+            if (!result) throw { code: 404, message: "History not found" }
+    
+            // Success response
+            res.header('Content-Type','text/csv')
+            res.attachment(`history_export${role === 'admin' ? '_all':''}.csv`)
+            return res.send(result)
+        } catch (error: any) {
+            next(error)
+        }
+    }
 }
