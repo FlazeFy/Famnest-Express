@@ -14,12 +14,13 @@ export class FamilyMemberController {
             // Query params
             const page = Number(req.query.page) || 1
             const limit = Number(req.query.limit) || 14
+            const search = typeof req.query.search === 'string' ? req.query.search.trim() : null
     
             // Get user id
             const { userId, role } = extractUserFromLocals(res)
     
             // Service : Get all family member
-            const result = await this.familyMemberService.getAllFamilyMemberService(page, limit, userId)
+            const result = await this.familyMemberService.getAllFamilyMemberService(page, limit, userId, search)
             if (!result) throw { code: 404, message: "Family member not found" }
     
             // Success response

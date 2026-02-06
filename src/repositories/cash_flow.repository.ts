@@ -151,7 +151,7 @@ export class CashFlowRepository {
         return {
             categories,
             series: Object.entries(map).map(([context, values]) => ({
-                context,
+                name: context,
                 data: keys.map(k => values[k]),
             })),
         }

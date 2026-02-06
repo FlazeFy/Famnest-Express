@@ -1,11 +1,20 @@
 import { prisma } from '../configs/prisma'
 
 export class FamilyMemberRepository {
-    public findFamilyMemberByFamilyIdRepo = async (page: number | null, limit: number | null, familyId: string) => {
+    public findFamilyMemberByFamilyIdRepo = async (page: number | null, limit: number | null, familyId: string, search?: string | null) => {
+        const where: any = { family_id: familyId }
+        if (search) {
+            where.OR = [
+                { family_relation: { contains: search, mode: "insensitive" } },
+                { user: { username: { contains: search, mode: "insensitive" } } },
+                { user: { fullname: { contains: search, mode: "insensitive" } } },
+                { user: { email: { contains: search, mode: "insensitive" } } }
+            ]
+        }
+      
         if (page && limit) {
             const skip = (page - 1) * limit
-            const where = { family_id: familyId }
-    
+        
             const [data, total] = await Promise.all([
                 prisma.family_member.findMany({
                     where,
@@ -14,29 +23,27 @@ export class FamilyMemberRepository {
                     select: {
                         id: true, family_relation: true,
                         user: {
-                            omit: { deleted_at: true, password: true }
-                        }  
+                            omit: { deleted_at: true, password: true },
+                        },
                     },
-                    orderBy: { user: { fullname: 'asc' } }
+                    orderBy: { user: { fullname: "asc" } }
                 }),
-                prisma.family_member.count({ where }),
+                prisma.family_member.count({ where })
             ])
-    
+
             return { data, total }
         } else {
             const data = await prisma.family_member.findMany({
-                where: { family_id: familyId },
-                orderBy: { 
-                    user: { fullname: "asc" } 
-                },
-                select: { 
-                    id: true, family_relation: true, user_id: true, 
+                where,
+                orderBy: { user: { fullname: "asc" } },
+                select: {
+                    id: true, family_relation: true, user_id: true,
                     user: {
-                        select: { username: true, fullname: true }
+                        select: { username: true, fullname: true, email: true }
                     }
                 }
             })
-
+        
             return { data, total: data.length }
         }
     }

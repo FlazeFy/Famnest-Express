@@ -10,13 +10,13 @@ export class FamilyMemberService {
         this.familyRepo = new FamilyRepository()
     }
 
-    public getAllFamilyMemberService = async (page: number, limit: number, userId: string) => {
+    public getAllFamilyMemberService = async (page: number, limit: number, userId: string, search: string | null) => {
         // Repo : Find family id by user id
         const family = await this.familyRepo.findFamilyByUserIdRepo(userId)
         if (!family) return null
 
         // Repo : Find all family member
-        const res = await this.familyMemberRepo.findFamilyMemberByFamilyIdRepo(page, limit, family.id)
+        const res = await this.familyMemberRepo.findFamilyMemberByFamilyIdRepo(page, limit, family.id, search)
         if (!res || res.data.length === 0) return null
     
         return res
