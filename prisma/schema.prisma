@@ -91,6 +91,7 @@ model user {
   family_sleep_time     family_sleep_time[]
   meals                 meal[]
   cash_flows            cash_flow[]
+  meal_feedbacks        meal_feedback[]
   meal_assigne          meal_prepare_by[] @relation("AssigneMeal")
   meal_prepare          meal_prepare_by[] @relation("PrepareMeal")
   task_assigns_created  task_assign[] @relation("TaskAssignCreator")
@@ -315,6 +316,7 @@ model meal {
   user    user @relation(fields: [created_by], references: [id])
 
   meal_prepare_bys  meal_prepare_by[]
+  meal_feedbacks    meal_feedback[]
 }
 
 model meal_prepare_by {
@@ -345,4 +347,17 @@ model cash_flow {
 
   // Relations
   user    user @relation(fields: [created_by], references: [id])
+}
+
+model meal_feedback {
+  id              String   @id @db.Char(36)
+  meal_id         String   @db.Char(36)
+  meal_rate       Int      @db.Integer
+  meal_feedback   String?  @db.Char(144)
+  created_at      DateTime @default(now()) @db.Timestamptz(6)
+  created_by      String   @db.Char(36)
+
+  // Relations
+  meal    meal  @relation(fields: [meal_id], references: [id])
+  user    user  @relation(fields: [created_by], references: [id])
 }

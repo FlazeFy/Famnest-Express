@@ -15,7 +15,7 @@ export class MealRepository {
         return prisma.meal.findFirst({ 
             skip, 
             where: whereClause,
-            select: { id: true, created_by: true }
+            select: { id: true, created_by: true, meal_day: true }
         })
     }
 
