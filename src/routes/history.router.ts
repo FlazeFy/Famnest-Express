@@ -13,11 +13,12 @@ export default class HistoryRouter {
     }
 
     private initializeRoute = () => {
-        const { getAllHistoryController, hardDeleteHistoryById, exportHistoryController } = this.historyController
+        const { getAllHistoryController, hardDeleteHistoryByIdController, exportHistoryController, hardDeleteAllHistoryController } = this.historyController
 
         this.route.get("/", verifyAuthToken, authorizeRole(["admin","user"]), getAllHistoryController)
         this.route.get("/export", verifyAuthToken, authorizeRole(["admin","user"]), exportHistoryController)
-        this.route.delete("/:id", verifyAuthToken, authorizeRole(["user"]), hardDeleteHistoryById)
+        this.route.delete("/:id", verifyAuthToken, authorizeRole(["user"]), hardDeleteHistoryByIdController)
+        this.route.delete("/", verifyAuthToken, authorizeRole(["user"]), hardDeleteAllHistoryController)
     }
 
     public getRouter = (): Router => {

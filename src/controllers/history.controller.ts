@@ -36,7 +36,7 @@ export class HistoryController {
         }
     }
 
-    public hardDeleteHistoryById = async (req: Request, res: Response, next: NextFunction) => {
+    public hardDeleteHistoryByIdController = async (req: Request, res: Response, next: NextFunction) => {
         try {
             // Param
             const { id } = req.params
@@ -53,8 +53,25 @@ export class HistoryController {
     
             // Success response
             return res.status(200).json({
-                message: "Delete history successful",
-                data: result,
+                message: "Delete history successful"
+            })
+        } catch (error: any) {
+            next(error)
+        }
+    }
+
+    public hardDeleteAllHistoryController = async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            // Get user id
+            const { userId } = extractUserFromLocals(res)
+    
+            // Service : Hard delete history by id
+            const result = await this.historyService.hardDeleteAllHistoryService(userId)
+            if (!result) throw { code: 404, message: "History not found" }
+    
+            // Success response
+            return res.status(200).json({
+                message: "Delete all history successful"
             })
         } catch (error: any) {
             next(error)

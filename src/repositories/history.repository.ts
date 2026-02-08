@@ -34,9 +34,9 @@ export class HistoryRepository {
         })
     }
 
-    public hardDeleteHistoryByIdRepo = async (id: string, userId: string) => {
+    public hardDeleteHistoryByIdRepo = async (id: string | null, userId: string) => {
         return prisma.history.deleteMany({
-            where: { id, created_by: userId},
+            where: { ...(id !== null && { id }), created_by: userId},
         })
     }
 
