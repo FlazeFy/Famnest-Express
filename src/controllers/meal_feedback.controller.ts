@@ -26,6 +26,28 @@ export class MealFeedbackController {
             // Success response
             return res.status(200).json({
                 message: "Get meal feedback successful",
+                data: result.data,
+                meta: {
+                    page, limit, total: result.total, total_page: Math.ceil(result.total / limit),
+                },
+            })
+        } catch (error: any) {
+            next(error)
+        }
+    }
+
+    public getLastMealFeedbackController = async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            // Get user id
+            const { userId } = extractUserFromLocals(res)
+    
+            // Service : Get last meal
+            const result = await this.mealFeedbackService.getLastMealFeedbackService(userId)
+            if (!result) throw { code: 404, message: "Meal feedback not found" }
+    
+            // Success response
+            return res.status(200).json({
+                message: "Get meal feedback successful",
                 data: result
             })
         } catch (error: any) {

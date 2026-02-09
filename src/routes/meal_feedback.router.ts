@@ -13,9 +13,10 @@ export default class MealFeedbackRouter {
     }
 
     private initializeRoute = () => {
-        const { getAllMealFeedbackByMealIdController } = this.mealFeedbackController
+        const { getAllMealFeedbackByMealIdController, getLastMealFeedbackController } = this.mealFeedbackController
 
         this.route.get("/:meal_id", verifyAuthToken, authorizeRole(["user"]), getAllMealFeedbackByMealIdController)
+        this.route.get("/stats/last", verifyAuthToken, authorizeRole(["user"]), getLastMealFeedbackController)
     }
 
     public getRouter = (): Router => {

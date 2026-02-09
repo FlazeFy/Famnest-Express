@@ -28,4 +28,16 @@ export class MealFeedbackService {
     
         return res
     }
+
+    public getLastMealFeedbackService = async (userId: string) => {
+        // Repo : Find family id by user id
+        const family = await this.familyRepo.findFamilyByUserIdRepo(userId)
+        if (!family) throw { code: 404, message: 'Family not found' }
+
+        // Repo : Find last meal feedback
+        const res = await this.mealFeedbackRepo.findLastMealFeedbackRepo(family.id)
+        if (!res) return null
+    
+        return res
+    }
 }
