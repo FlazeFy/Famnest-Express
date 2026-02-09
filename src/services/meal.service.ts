@@ -31,7 +31,7 @@ export class MealService {
         return res
     }
 
-    public postCreateMealService = async (meal_name: string, meal_desc: string | null, meal_time: string, meal_day: string, userId: string) => {
+    public postCreateMealService = async (meal_name: string, meal_desc: string | null, meal_time: string, meal_day: string, userId: string, meal_prepare_by: string[]) => {
         const dayEnum = DayName[meal_day as keyof typeof DayName]
         const timeEnum = MealTime[meal_time as keyof typeof MealTime]
         
@@ -62,7 +62,14 @@ export class MealService {
         }
         
         // Repo : Create meal
-        return await this.mealRepo.createMealRepo(meal_name, meal_desc, dayEnum, timeEnum, family.id, userId)
+        const meal = await this.mealRepo.createMealRepo(meal_name, meal_desc, dayEnum, timeEnum, family.id, userId)
+
+        // Repo : Create meal prepare by
+        for (const dt of meal_prepare_by) {
+            await this.mealPrepareByRepo.createMealPrepareByRepo(meal.id, dt, userId)
+        }
+
+        return meal
     }
 
     public hardDeleteMealByIdService = async (userId: string, mealId: string) => {

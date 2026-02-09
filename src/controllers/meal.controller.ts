@@ -31,13 +31,13 @@ export class MealController {
     public postCreateMealController = async (req: Request, res: Response, next: NextFunction) => {
         try {
             // Request body
-            const { meal_name, meal_desc, meal_time, meal_day } = req.body
+            const { meal_name, meal_desc, meal_time, meal_day, meal_prepare_by } = req.body
     
             // Get user id
             const { userId } = extractUserFromLocals(res)
     
             // Service : Create meal
-            const result = await this.mealService.postCreateMealService(meal_name, meal_desc, meal_time, meal_day, userId)
+            const result = await this.mealService.postCreateMealService(meal_name, meal_desc, meal_time, meal_day, userId, meal_prepare_by)
             if (!result) throw { code: 500, message: "Something went wrong" }
     
             // Success response
