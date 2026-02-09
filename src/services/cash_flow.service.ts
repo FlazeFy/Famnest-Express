@@ -12,7 +12,7 @@ export class CashFlowService {
         this.familyRepo = new FamilyRepository()
     }
 
-    public getAllCashFlowService = async (page: number, limit: number, userId: string | null) => {
+    public getAllCashFlowService = async (page: number, limit: number, userId: string | null, search: string | null, category: string | null, type: string | null) => {
         let familyId: string | null =  null
 
         if (userId) {
@@ -24,7 +24,7 @@ export class CashFlowService {
         }
 
         // Repo : Find all cash flow
-        const res = await this.cashFlowRepo.findAllCashFlowRepo(page, limit, familyId)
+        const res = await this.cashFlowRepo.findAllCashFlowRepo(page, limit, familyId, search, category, type)
         if (!res || res.data.length === 0) return null
     
         return res

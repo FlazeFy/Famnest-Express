@@ -15,12 +15,15 @@ export class CashFlowController {
             // Query params
             const page = Number(req.query.page) || 1
             const limit = Number(req.query.limit) || 14
+            const search = typeof req.query.search === 'string' ? req.query.search.trim() : null
+            const category = typeof req.query.category === 'string' ? req.query.category.trim() : null
+            const type = typeof req.query.type === 'string' ? req.query.type.trim() : null
 
             // Get user id
             const { userId, role } = extractUserFromLocals(res)
     
             // Service : Get all cash flow
-            const result = await this.cashFlowService.getAllCashFlowService(page, limit, role === "user" ? userId : null)
+            const result = await this.cashFlowService.getAllCashFlowService(page, limit, role === "user" ? userId : null, search, category !== 'all' ? category : null, type !== 'all' ? type : null)
             if (!result) throw { code: 404, message: "Cash flow not found" }
     
             // Success response

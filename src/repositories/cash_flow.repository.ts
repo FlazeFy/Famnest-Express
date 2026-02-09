@@ -3,15 +3,25 @@ import { CashFlowCategory } from '../generated/prisma/enums'
 import { dayKey, dayLabel, getLast7Days, getLast7Months, monthKey, monthLabel } from '../utils/generator.util'
 
 export class CashFlowRepository {
-    public findAllCashFlowRepo = async (page: number, limit: number, familyId: string | null) => {
+    public findAllCashFlowRepo = async (page: number, limit: number, familyId: string | null, search: string | null, category: string | null, type: string | null) => {
         const skip = (page - 1) * limit
-        const whereClause = familyId ?{
-            user: {
+        const whereClause: any = {}
+
+        if (familyId) {
+            whereClause.user = {
                 family_members: {
                     some: { family_id: familyId }
                 }
             }
-        } : undefined
+        }
+        if (category) whereClause.flow_category = category
+        if (type) whereClause.flow_type = type
+        if (search) {
+            whereClause.OR = [
+                { flow_context: { contains: search, mode: "insensitive" } },
+                { flow_desc: { contains: search, mode: "insensitive" } }
+            ]
+        }
 
         const [data, total] = await Promise.all([
             prisma.cash_flow.findMany({
