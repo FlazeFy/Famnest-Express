@@ -13,7 +13,7 @@ export class TaskService {
         this.taskAssignRepo = new TaskAssignRepository()
     }
 
-    public getAllTaskService = async (page: number, limit: number, userId: string | null) => {
+    public getAllTaskService = async (page: number, limit: number, userId: string | null, search: string | null, status: string | null) => {
         let familyId: string | null =  null
 
         if (userId) {
@@ -25,7 +25,7 @@ export class TaskService {
         }
 
         // Repo : Find all task
-        const res = await this.taskRepo.findAllTaskRepo(page, limit, familyId)
+        const res = await this.taskRepo.findAllTaskRepo(page, limit, familyId, search, status)
         if (!res || res.data.length === 0) return null
     
         return res

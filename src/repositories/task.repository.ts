@@ -29,9 +29,24 @@ export class TaskRepository {
         })
     }      
 
-    public findAllTaskRepo = async (page: number, limit: number, familyId: string | null) => {
+    public findAllTaskRepo = async (page: number, limit: number, familyId: string | null, search: string | null, status: string | null) => {
         const skip = (page - 1) * limit
-        const whereClause = familyId ? { family_id: familyId } : undefined
+        const whereClause: any = {}
+
+        if (familyId) {
+            whereClause.user = {
+                family_members: {
+                    some: { family_id: familyId }
+                }
+            }
+        }
+        if (status) whereClause.status = status
+        if (search) {
+            whereClause.OR = [
+                { task_title: { contains: search, mode: "insensitive" } },
+                { task_desc: { contains: search, mode: "insensitive" } }
+            ]
+        }
 
         const [data, total] = await Promise.all([
             prisma.task.findMany({
