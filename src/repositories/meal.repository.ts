@@ -52,6 +52,12 @@ export class MealRepository {
         )
     }
 
+    public findMealByIdRepo = async (family_id: string, id: string) => {
+        return prisma.meal.findFirst({
+            where: { id, family_id }
+        })
+    }
+
     public findMealByNameDayTimeFamilyIdRepo = async (meal_name: string, meal_day: DayName, meal_time: MealTime, family_id: string) => {
         return prisma.meal.findFirst({
             where: { meal_name, meal_day, meal_time, family_id }
