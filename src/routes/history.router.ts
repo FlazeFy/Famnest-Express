@@ -1,6 +1,8 @@
 import { Router } from "express"
 import { HistoryController } from "../controllers/history.controller"
 import { authorizeRole, verifyAuthToken } from "../middlewares/auth.middleware"
+import { templateIdParamSchema } from "../validators/template.validator"
+import { validateParamMiddleware } from "../middlewares/validator.middleware"
 
 export default class HistoryRouter {
     private route: Router
@@ -17,7 +19,7 @@ export default class HistoryRouter {
 
         this.route.get("/", verifyAuthToken, authorizeRole(["admin","user"]), getAllHistoryController)
         this.route.get("/export", verifyAuthToken, authorizeRole(["admin","user"]), exportHistoryController)
-        this.route.delete("/:id", verifyAuthToken, authorizeRole(["user"]), hardDeleteHistoryByIdController)
+        this.route.delete("/:id", verifyAuthToken, authorizeRole(["user"]), validateParamMiddleware(templateIdParamSchema), hardDeleteHistoryByIdController)
         this.route.delete("/", verifyAuthToken, authorizeRole(["user"]), hardDeleteAllHistoryController)
     }
 

@@ -1,8 +1,9 @@
 import { Router } from "express"
 import { DictionaryController } from "../controllers/dictionary.controller"
 import { authorizeRole, verifyAuthToken } from "../middlewares/auth.middleware"
-import { validateBodyMiddleware } from "../middlewares/validator.middleware"
+import { validateBodyMiddleware, validateParamMiddleware } from "../middlewares/validator.middleware"
 import { dictionarySchema } from "../validators/dictionary.validator"
+import { templateIdParamSchema } from "../validators/template.validator"
 
 export default class DictionaryRouter {
     private route: Router
@@ -19,7 +20,7 @@ export default class DictionaryRouter {
 
         this.route.get("/", getAllDictionary)
         this.route.post("/", verifyAuthToken, authorizeRole(["admin"]), validateBodyMiddleware(dictionarySchema), postCreateDictionaryController)
-        this.route.delete("/:id", verifyAuthToken, authorizeRole(['admin']), hardDeleteDictionaryByIdController)
+        this.route.delete("/:id", verifyAuthToken, authorizeRole(['admin']), validateParamMiddleware(templateIdParamSchema), hardDeleteDictionaryByIdController)
     }
 
     public getRouter = (): Router => {

@@ -1,4 +1,9 @@
 import { ValidatorSchema } from "../middlewares/validator.middleware"
+import { ParamValidatorSchema } from "../middlewares/validator.middleware";
+
+export const mealIdParamSchema: ParamValidatorSchema = {
+    meal_id: { required: true, min: 36, max: 36 }
+}
 
 export const mealSchema: ValidatorSchema = {
     meal_prepare_by: { required: true },

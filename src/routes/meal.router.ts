@@ -1,8 +1,9 @@
 import { Router } from "express"
 import { MealController } from "../controllers/meal.controller"
 import { authorizeRole, verifyAuthToken } from "../middlewares/auth.middleware"
-import { validateBodyMiddleware } from "../middlewares/validator.middleware"
+import { validateBodyMiddleware, validateParamMiddleware } from "../middlewares/validator.middleware"
 import { mealSchema } from "../validators/meal.validator"
+import { templateIdParamSchema } from "../validators/template.validator"
 
 export default class MealRouter {
     private route: Router
@@ -19,7 +20,7 @@ export default class MealRouter {
 
         this.route.get("/", verifyAuthToken, authorizeRole(["user","admin"]), getAllMealController)
         this.route.post("/", verifyAuthToken, authorizeRole(["user"]), validateBodyMiddleware(mealSchema), postCreateMealController)
-        this.route.delete("/:id", verifyAuthToken, authorizeRole(["user"]), hardDeleteMealByIdController)
+        this.route.delete("/:id", verifyAuthToken, authorizeRole(["user"]), validateParamMiddleware(templateIdParamSchema), hardDeleteMealByIdController)
     }
 
     public getRouter = (): Router => {
