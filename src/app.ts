@@ -15,6 +15,7 @@ import FamilyMemberRouter from "./routes/family_member.router"
 import FamilySleepTimeRouter from "./routes/family_sleep_time.router"
 import CashFlowRouter from "./routes/cash_flow.router"
 import MealFeedbackRouter from "./routes/meal_feedback.router"
+import ScheduleRouter from "./routes/schedule.router"
 
 const PORT = process.env.PORT
 
@@ -51,6 +52,7 @@ class App {
         const familySleepTimeRouter = new FamilySleepTimeRouter()
         const cashFlowRouter = new CashFlowRouter()
         const mealFeedbackRouter = new MealFeedbackRouter()
+        const scheduleRouter = new ScheduleRouter()
         const authRouter = new AuthRouter()
         this.app.use("/api/v1/dictionaries", dictionaryRouter.getRouter())
         this.app.use("/api/v1/auths", authRouter.getRouter())
@@ -64,6 +66,7 @@ class App {
         this.app.use("/api/v1/family_members", familyMemberRouter.getRouter())
         this.app.use("/api/v1/family_sleep_time", familySleepTimeRouter.getRouter())
         this.app.use("/api/v1/meal_feedbacks", mealFeedbackRouter.getRouter())
+        this.app.use("/api/v1/schedules", scheduleRouter.getRouter())
     }
 
     // Error handling
