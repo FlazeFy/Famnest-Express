@@ -109,4 +109,26 @@ export class TaskController {
             next(error)
         }
     }
+
+    public getTaskTotalContextController = async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            // Params
+            const context = req.params.context as string
+
+            // Get user id
+            const { userId, role } = extractUserFromLocals(res)
+    
+            // Service : Get task total context
+            const result = await this.taskService.getTaskTotalContextService(context, role === "user" ? userId : null)
+            if (!result) throw { code: 404, message: "Task not found" }
+    
+            // Success response
+            return res.status(200).json({
+                message: "Get task total context successful",
+                data: result
+            })
+        } catch (error: any) {
+            next(error)
+        }
+    }
 }

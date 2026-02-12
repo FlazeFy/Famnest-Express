@@ -1,13 +1,16 @@
 import { FamilyRepository } from "../repositories/family.repository"
+import { MultiRepository } from "../repositories/multi.repository"
 import { TaskRepository } from "../repositories/task.repository"
 import { TaskAssignRepository } from "../repositories/task_assign.repository"
 
 export class TaskService {
+    private multiRepo: MultiRepository
     private taskRepo: TaskRepository
     private familyRepo: FamilyRepository
     private taskAssignRepo: TaskAssignRepository
 
     constructor(){
+        this.multiRepo = new MultiRepository()
         this.taskRepo = new TaskRepository()
         this.familyRepo = new FamilyRepository()
         this.taskAssignRepo = new TaskAssignRepository()
@@ -60,6 +63,14 @@ export class TaskService {
         // Repo : Find all task
         const res = await this.taskRepo.findIncomingTaskRepo(page, limit, familyId, currentDate)
         if (!res || res.data.length === 0) return null
+    
+        return res
+    }
+
+    public getTaskTotalContextService = async (context: string, userId: string | null) => {
+        // Repo : Find task context total
+        const res = await this.multiRepo.getContextTotalStats(context, userId, 'task')
+        if (!res || res.length === 0) return null
     
         return res
     }
