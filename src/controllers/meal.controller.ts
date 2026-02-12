@@ -28,6 +28,28 @@ export class MealController {
         }
     }
 
+    public getMealTotalContextController = async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            // Params
+            const context = req.params.context as string
+
+            // Get user id
+            const { userId, role } = extractUserFromLocals(res)
+    
+            // Service : Get meal total context
+            const result = await this.mealService.getMealTotalContextService(context, role === "user" ? userId : null)
+            if (!result) throw { code: 404, message: "Meal not found" }
+    
+            // Success response
+            return res.status(200).json({
+                message: "Get meal total context successful",
+                data: result
+            })
+        } catch (error: any) {
+            next(error)
+        }
+    }
+
     public postCreateMealController = async (req: Request, res: Response, next: NextFunction) => {
         try {
             // Request body

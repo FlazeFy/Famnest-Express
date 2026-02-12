@@ -3,16 +3,19 @@ import { FamilyRepository } from "../repositories/family.repository"
 import { FamilyMemberRepository } from "../repositories/family_member.repository"
 import { MealRepository } from "../repositories/meal.repository"
 import { MealPrepareByRepository } from "../repositories/meal_prepare_by.repository"
+import { MultiRepository } from "../repositories/multi.repository"
 import { announcementEmailTemplate } from "../templates/announcement.template"
 import { sendEmail } from "../utils/mailer.util"
 
 export class MealService {
+    private multiRepo: MultiRepository
     private mealRepo: MealRepository
     private mealPrepareByRepo: MealPrepareByRepository
     private familyRepo: FamilyRepository
     private familyMemberRepo: FamilyMemberRepository
 
     constructor(){
+        this.multiRepo = new MultiRepository()
         this.mealRepo = new MealRepository()
         this.familyRepo = new FamilyRepository()
         this.mealPrepareByRepo = new MealPrepareByRepository()
@@ -26,6 +29,14 @@ export class MealService {
 
         // Repo : Find all meal
         const res = await this.mealRepo.findAllMealByFamilyIdRepo(family.id)
+        if (!res || res.length === 0) return null
+    
+        return res
+    }
+
+    public getMealTotalContextService = async (context: string, userId: string | null) => {
+        // Repo : Find meal context total
+        const res = await this.multiRepo.getContextTotalStats(context, userId, 'meal')
         if (!res || res.length === 0) return null
     
         return res
