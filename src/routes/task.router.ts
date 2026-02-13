@@ -18,7 +18,7 @@ export default class TaskRouter {
         const { getAllTaskController, getIncomingTaskController, hardDeleteTaskByIdController, getTotalDailyTaskController, getTaskTotalContextController, exportTaskController } = this.taskController
 
         this.route.get("/", verifyAuthToken, authorizeRole(["admin","user"]), getAllTaskController)
-        this.route.get("/export", verifyAuthToken, authorizeRole(["admin","user"]), exportTaskController)
+        this.route.get("/export", verifyAuthToken, authorizeRole(["user"]), exportTaskController)
         this.route.get("/:context/total", verifyAuthToken, authorizeRole(["admin","user"]), getTaskTotalContextController)
         this.route.get("/total", verifyAuthToken, authorizeRole(["admin","user"]), getTotalDailyTaskController)
         this.route.get("/incoming", verifyAuthToken, authorizeRole(["admin","user"]), getIncomingTaskController)

@@ -5,6 +5,7 @@ import { MealRepository } from "../repositories/meal.repository"
 import { MealPrepareByRepository } from "../repositories/meal_prepare_by.repository"
 import { MultiRepository } from "../repositories/multi.repository"
 import { announcementEmailTemplate } from "../templates/announcement.template"
+import { exportToCSV } from "../utils/converter"
 import { sendEmail } from "../utils/mailer.util"
 
 export class MealService {
@@ -98,5 +99,30 @@ export class MealService {
             if (error.code === "P2025") return null
             throw error
         }
+    }
+
+    public exportAllMealService = async (userId: string) => {
+        // Repo : Find family id by user id
+        const family = await this.familyRepo.findFamilyByUserIdRepo(userId)
+        if (!family) throw { code: 400, message: 'Family not found' }
+
+        // Repo : Find all meal
+        const res = await this.mealRepo.findAllMealExportRepo(family.id)
+        if (!res || res.length === 0) return null
+
+        // Remap for nested object
+        const mapped = res.map(item => ({
+            meal_name: item.meal_name,
+            meal_desc: item.meal_desc,
+            meal_day: item.meal_day,
+            meal_time: item.meal_time,
+            prepares: item.meal_prepare_bys?.map(p => p.user_prepare.username).join(', '),
+            created_at: item.created_at
+        }))
+
+        // Dataset headers
+        const fields = ['meal_name','meal_desc','meal_day','meal_time','prepares','created_at']
+
+        return exportToCSV(mapped, fields)
     }
 }

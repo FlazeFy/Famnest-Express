@@ -91,4 +91,23 @@ export class MealController {
             next(error)
         }
     }
+
+    // Export dataset controller
+    public exportMealController = async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            // Get user id
+            const { userId } = extractUserFromLocals(res)
+    
+            // Service : Export meal as CSV
+            const result = await this.mealService.exportAllMealService(userId)
+            if (!result) throw { code: 404, message: "Meal not found" }
+    
+            // Success response
+            res.header('Content-Type','text/csv')
+            res.attachment(`meal_export.csv`)
+            return res.send(result)
+        } catch (error: any) {
+            next(error)
+        }
+    }
 }

@@ -79,5 +79,27 @@ export class MealRepository {
             }
         })
     }
+
+    public findAllMealExportRepo = async (familyId: string | null) => {
+        const where = familyId ? { family_id: familyId } : {}
+        return prisma.meal.findMany({
+            where,
+            orderBy: {
+                created_at: 'desc'
+            },
+            select: {
+                meal_name: true, meal_desc: true, meal_day: true, meal_time: true, created_at: true,
+                meal_prepare_bys: {
+                    select: {
+                        user_prepare: {
+                            select: {
+                                username: true
+                            }
+                        }
+                    }
+                }
+            }
+        })
+    }
 }
   

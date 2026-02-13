@@ -94,9 +94,13 @@ export class TaskService {
         }
     }
 
-    public exportAllTaskService = async (userId: string | null) => {
+    public exportAllTaskService = async (userId: string) => {
+        // Repo : Find family id by user id
+        const family = await this.familyRepo.findFamilyByUserIdRepo(userId)
+        if (!family) throw { code: 400, message: 'Family not found' }
+
         // Repo : Find all task
-        const res = await this.taskRepo.findAllTaskExportRepo(userId)
+        const res = await this.taskRepo.findAllTaskExportRepo(family.id)
         if (!res || res.length === 0) return null
 
         // Remap for nested object

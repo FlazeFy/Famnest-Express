@@ -181,8 +181,8 @@ export class TaskRepository {
         })
     }
 
-    public findAllTaskExportRepo = async (userId: string | null) => {
-        const where = userId ? { created_by: userId } : {}
+    public findAllTaskExportRepo = async (familyId: string | null) => {
+        const where = familyId ? { family_id: familyId } : {}
         return prisma.task.findMany({
             where,
             orderBy: {
@@ -190,9 +190,9 @@ export class TaskRepository {
             },
             select: {
                 task_title: true, task_desc: true, status: true, start_date: true, due_date: true, tags: true, created_at: true,
-                user: !userId ? {
+                user: {
                     select: { username: true }
-                } : {},
+                },
                 task_assigns: {
                     select: {
                         assignee: {

@@ -136,15 +136,15 @@ export class TaskController {
     public exportTaskController = async (req: Request, res: Response, next: NextFunction) => {
         try {
             // Get user id
-            const { userId, role } = extractUserFromLocals(res)
+            const { userId } = extractUserFromLocals(res)
     
             // Service : Export task as CSV
-            const result = await this.taskService.exportAllTaskService(role === "user" ? userId : null)
+            const result = await this.taskService.exportAllTaskService(userId)
             if (!result) throw { code: 404, message: "Task not found" }
     
             // Success response
             res.header('Content-Type','text/csv')
-            res.attachment(`task_export${role === 'admin' ? '_all':''}.csv`)
+            res.attachment(`task_export.csv`)
             return res.send(result)
         } catch (error: any) {
             next(error)

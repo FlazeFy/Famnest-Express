@@ -16,9 +16,10 @@ export default class MealRouter {
     }
 
     private initializeRoute = () => {
-        const { getAllMealController, hardDeleteMealByIdController, postCreateMealController, getMealTotalContextController } = this.mealController
+        const { getAllMealController, hardDeleteMealByIdController, postCreateMealController, getMealTotalContextController, exportMealController } = this.mealController
 
         this.route.get("/", verifyAuthToken, authorizeRole(["user","admin"]), getAllMealController)
+        this.route.get("/export", verifyAuthToken, authorizeRole(["user"]), exportMealController)
         this.route.get("/:context/total", verifyAuthToken, authorizeRole(["admin","user"]), getMealTotalContextController)
         this.route.post("/", verifyAuthToken, authorizeRole(["user"]), validateBodyMiddleware(mealSchema), postCreateMealController)
         this.route.delete("/:id", verifyAuthToken, authorizeRole(["user"]), validateParamMiddleware(templateIdParamSchema), hardDeleteMealByIdController)
