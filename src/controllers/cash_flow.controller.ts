@@ -106,4 +106,23 @@ export class CashFlowController {
             next(error)
         }
     }
+
+    // Export dataset controller
+    public exportCashFlowController = async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            // Get user id
+            const { userId, role } = extractUserFromLocals(res)
+    
+            // Service : Export cash flow as CSV
+            const result = await this.cashFlowService.exportAllCashFlowService(role === "user" ? userId : null)
+            if (!result) throw { code: 404, message: "Cash flow not found" }
+    
+            // Success response
+            res.header('Content-Type','text/csv')
+            res.attachment(`cash_flow_export${role === 'admin' ? '_all':''}.csv`)
+            return res.send(result)
+        } catch (error: any) {
+            next(error)
+        }
+    }
 }

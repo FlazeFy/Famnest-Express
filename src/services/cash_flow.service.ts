@@ -1,6 +1,6 @@
 import { FamilyRepository } from "../repositories/family.repository"
 import { CashFlowRepository } from "../repositories/cash_flow.repository"
-import { formatDateTime } from "../utils/converter"
+import { exportToCSV, formatDateTime } from "../utils/converter"
 import { CashFlowCategory, CashFlowType } from "../generated/prisma/enums"
 
 export class CashFlowService {
@@ -70,5 +70,16 @@ export class CashFlowService {
             if (error.code === "P2025") return null
             throw error
         }
+    }
+
+    public exportAllCashFlowService = async (userId: string | null) => {
+        // Repo : Find all cash flow
+        const res = await this.cashFlowRepo.findAllCashFlowExportRepo(userId)
+        if (!res || res.length === 0) return null
+
+        // Dataset headers
+        const fields = userId ? ['flow_type', 'flow_context', 'flow_desc', 'flow_category', 'flow_amount', 'tags', 'created_at'] : ['flow_type', 'flow_context', 'flow_desc', 'flow_category', 'flow_amount', 'tags', 'created_at', 'user.username']
+    
+        return exportToCSV(res, fields)
     }
 }

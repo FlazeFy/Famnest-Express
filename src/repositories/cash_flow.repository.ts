@@ -186,6 +186,22 @@ export class CashFlowRepository {
         }))
     }
 
+    public findAllCashFlowExportRepo = async (userId: string | null) => {
+        const where = userId ? { created_by: userId } : {}
+        return prisma.cash_flow.findMany({
+            where,
+            orderBy: {
+                created_at: 'desc'
+            },
+            select: {
+                flow_type: true, flow_context: true, flow_desc: true, flow_category: true, flow_amount: true, tags: true, created_at: true,
+                user: !userId ? {
+                    select: { username: true }
+                } : {}
+            }
+        })
+    }
+
     public deleteCashFlowByIdRepo = async (id: string, created_by: string) => {
         return await prisma.cash_flow.delete({
             where: { 

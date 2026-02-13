@@ -24,7 +24,7 @@ export class HistoryService {
         // Dataset headers
         const fields = userId ? ['history_context', 'history_type', 'created_at'] : ['history_context', 'history_type', 'created_at', 'user.username']
     
-        return  exportToCSV(res, fields)
+        return exportToCSV(res, fields)
     }
 
     public hardDeleteHistoryByIdService = async (id: string, created_by: string) => {
