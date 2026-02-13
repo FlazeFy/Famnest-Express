@@ -180,5 +180,30 @@ export class TaskRepository {
             }
         })
     }
+
+    public findAllTaskExportRepo = async (userId: string | null) => {
+        const where = userId ? { created_by: userId } : {}
+        return prisma.task.findMany({
+            where,
+            orderBy: {
+                created_at: 'desc'
+            },
+            select: {
+                task_title: true, task_desc: true, status: true, start_date: true, due_date: true, tags: true, created_at: true,
+                user: !userId ? {
+                    select: { username: true }
+                } : {},
+                task_assigns: {
+                    select: {
+                        assignee: {
+                            select: {
+                                username: true
+                            }
+                        }
+                    }
+                }
+            }
+        })
+    }
 }
   

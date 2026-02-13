@@ -77,9 +77,22 @@ export class CashFlowService {
         const res = await this.cashFlowRepo.findAllCashFlowExportRepo(userId)
         if (!res || res.length === 0) return null
 
-        // Dataset headers
-        const fields = userId ? ['flow_type', 'flow_context', 'flow_desc', 'flow_category', 'flow_amount', 'tags', 'created_at'] : ['flow_type', 'flow_context', 'flow_desc', 'flow_category', 'flow_amount', 'tags', 'created_at', 'user.username']
+        // Remap for nested object
+        const mapped = res.map(item => ({
+            flow_type: item.flow_type,
+            flow_context: item.flow_context,
+            flow_desc: item.flow_desc,
+            flow_category: item.flow_category,
+            flow_amount: item.flow_amount,
+            tags: item.tags?.join(', '),
+            created_at: item.created_at,
+            ...(userId ? {} : { created_by_username: item.user?.username })
+        }))
     
-        return exportToCSV(res, fields)
+        // Dataset headers
+        const fields = userId ? ['flow_type','flow_context','flow_desc','flow_category','flow_amount','tags','created_at']
+            : ['flow_type','flow_context','flow_desc','flow_category','flow_amount','tags','created_at','created_by_username']
+    
+        return exportToCSV(mapped, fields)
     }
 }

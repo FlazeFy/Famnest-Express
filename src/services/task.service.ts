@@ -2,6 +2,7 @@ import { FamilyRepository } from "../repositories/family.repository"
 import { MultiRepository } from "../repositories/multi.repository"
 import { TaskRepository } from "../repositories/task.repository"
 import { TaskAssignRepository } from "../repositories/task_assign.repository"
+import { exportToCSV } from "../utils/converter"
 
 export class TaskService {
     private multiRepo: MultiRepository
@@ -91,5 +92,30 @@ export class TaskService {
             if (error.code === "P2025") return null
             throw error
         }
+    }
+
+    public exportAllTaskService = async (userId: string | null) => {
+        // Repo : Find all task
+        const res = await this.taskRepo.findAllTaskExportRepo(userId)
+        if (!res || res.length === 0) return null
+
+        // Remap for nested object
+        const mapped = res.map(task => ({
+            task_title: task.task_title,
+            task_desc: task.task_desc,
+            status: task.status,
+            start_date: task.start_date,
+            due_date: task.due_date,
+            tags: task.tags?.join(', '),
+            created_at: task.created_at,
+            ...(userId ? {} : { 'user.username': task.user?.username }),
+            assignees: task.task_assigns?.map(a => a.assignee.username).join(', ')
+        }))
+
+        // Dataset headers
+        const fields = userId ? ['task_title','task_desc','status','start_date','due_date','tags','created_at','assignees']
+            : ['task_title','task_desc','status','start_date','due_date','tags','created_at','user.username','assignees']
+
+        return exportToCSV(mapped, fields)
     }
 }

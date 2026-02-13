@@ -20,11 +20,19 @@ export class HistoryService {
         // Repo : Find all history
         const res = await this.historyRepo.findAllHistoryExportRepo(userId)
         if (!res || res.length === 0) return null
-
-        // Dataset headers
-        const fields = userId ? ['history_context', 'history_type', 'created_at'] : ['history_context', 'history_type', 'created_at', 'user.username']
     
-        return exportToCSV(res, fields)
+        // Remap for nested object
+        const mapped = res.map(item => ({
+            history_context: item.history_context,
+            history_type: item.history_type,
+            created_at: item.created_at,
+            ...(userId ? {} : { created_by_username: item.user?.username })
+        }))
+    
+        // Dataset headers
+        const fields = userId ? ['history_context','history_type','created_at'] : ['history_context','history_type','created_at','created_by_username']
+    
+        return exportToCSV(mapped, fields)
     }
 
     public hardDeleteHistoryByIdService = async (id: string, created_by: string) => {
