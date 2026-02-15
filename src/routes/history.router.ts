@@ -23,7 +23,5 @@ export default class HistoryRouter {
         this.route.delete("/", verifyAuthToken, authorizeRole(["user"]), hardDeleteAllHistoryController)
     }
 
-    public getRouter = (): Router => {
-        return this.route
-    }
+    public getRouter = (): Router => this.route
 }

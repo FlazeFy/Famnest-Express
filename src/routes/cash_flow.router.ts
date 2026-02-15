@@ -24,7 +24,5 @@ export default class CashFlowRouter {
         this.route.get("/by_category", verifyAuthToken, authorizeRole(["user"]), getTotalCashFlowPerCategoryController)
     }
 
-    public getRouter = (): Router => {
-        return this.route
-    }
+    public getRouter = (): Router => this.route
 }

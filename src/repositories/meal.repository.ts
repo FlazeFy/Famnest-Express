@@ -52,11 +52,7 @@ export class MealRepository {
         )
     }
 
-    public findMealByIdRepo = async (family_id: string, id: string) => {
-        return prisma.meal.findFirst({
-            where: { id, family_id }
-        })
-    }
+    public findMealByIdRepo = async (family_id: string, id: string) => prisma.meal.findFirst({ where: { id, family_id }})
 
     public findMealByNameDayTimeFamilyIdRepo = async (meal_name: string, meal_day: DayName, meal_time: MealTime, family_id: string) => {
         return prisma.meal.findFirst({
@@ -72,29 +68,19 @@ export class MealRepository {
         })
     }
 
-    public deleteMealByIdRepo = async (family_id: string, id: string) => {
-        return await prisma.meal.delete({
-            where: { 
-                id, family_id
-            }
-        })
-    }
+    public deleteMealByIdRepo = async (family_id: string, id: string) => await prisma.meal.delete({ where: { id, family_id }})
 
     public findAllMealExportRepo = async (familyId: string | null) => {
         const where = familyId ? { family_id: familyId } : {}
         return prisma.meal.findMany({
             where,
-            orderBy: {
-                created_at: 'desc'
-            },
+            orderBy: { created_at: 'desc' },
             select: {
                 meal_name: true, meal_desc: true, meal_day: true, meal_time: true, created_at: true,
                 meal_prepare_bys: {
                     select: {
                         user_prepare: {
-                            select: {
-                                username: true
-                            }
+                            select: { username: true }
                         }
                     }
                 }

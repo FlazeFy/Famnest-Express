@@ -20,7 +20,5 @@ export default class QuestionRouter {
         this.route.get("/random", getRandomAnsweredQuestionController)
     }
 
-    public getRouter = (): Router => {
-        return this.route
-    }
+    public getRouter = (): Router => this.route
 }

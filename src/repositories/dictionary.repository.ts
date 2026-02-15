@@ -9,9 +9,7 @@ export class DictionaryRepository {
             prisma.dictionary.findMany({
                 skip,
                 take: limit,
-                orderBy: {
-                    dictionary_name: "asc",
-                }
+                orderBy: { dictionary_name: "asc" }
             }),
             prisma.dictionary.count(),
         ])
@@ -35,9 +33,7 @@ export class DictionaryRepository {
         })
     }
 
-    public findDictionaryByIdRepo = async (id: string) => {
-        return prisma.dictionary.findUnique({ where: { id } })
-    }
+    public findDictionaryByIdRepo = async (id: string) => prisma.dictionary.findUnique({ where: { id } })
 
     public findDictionaryByNameAndTypeRepo = async (dictionary_name: string, dictionary_type: string) => {
         return prisma.dictionary.findFirst({
@@ -53,8 +49,6 @@ export class DictionaryRepository {
         })
     }
     
-    public deleteDictionaryByIdRepo = async (id: string) => {
-        return prisma.dictionary.delete({ where: { id } })
-    }
+    public deleteDictionaryByIdRepo = async (id: string) => prisma.dictionary.delete({ where: { id } })
 }
   

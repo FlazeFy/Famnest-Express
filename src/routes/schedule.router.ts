@@ -18,7 +18,5 @@ export default class ScheduleRouter {
         this.route.get("/:context", verifyAuthToken, authorizeRole(["admin","user"]), getScheduleTotalContextController)
     }
 
-    public getRouter = (): Router => {
-        return this.route
-    }
+    public getRouter = (): Router => this.route
 }

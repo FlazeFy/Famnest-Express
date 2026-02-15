@@ -15,9 +15,7 @@ export class FeedbackRepository {
                         select: { username: true, email: role === "user" ? false : true }
                     }
                 },
-                orderBy: {
-                    created_at: "desc",
-                }
+                orderBy: { created_at: "desc" }
             }),
             prisma.feedback.count(),
         ])
@@ -51,10 +49,6 @@ export class FeedbackRepository {
         })
     }
 
-    public deleteFeedbackByIdRepo = async (id: string) => {
-        return await prisma.feedback.delete({
-            where: { id }
-        })
-    }
+    public deleteFeedbackByIdRepo = async (id: string) => await prisma.feedback.delete({ where: { id }})
 }
   

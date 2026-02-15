@@ -23,7 +23,5 @@ export default class DictionaryRouter {
         this.route.delete("/:id", verifyAuthToken, authorizeRole(['admin']), validateParamMiddleware(templateIdParamSchema), hardDeleteDictionaryByIdController)
     }
 
-    public getRouter = (): Router => {
-        return this.route
-    }
+    public getRouter = (): Router => this.route
 }

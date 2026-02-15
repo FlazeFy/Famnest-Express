@@ -24,7 +24,5 @@ export default class FeedbackRouter {
         this.route.get("/random", getRandomFeedbackController)
     }
 
-    public getRouter = (): Router => {
-        return this.route
-    }
+    public getRouter = (): Router => this.route
 }

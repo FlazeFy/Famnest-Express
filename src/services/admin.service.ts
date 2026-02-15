@@ -7,8 +7,6 @@ export class AdminService {
         this.adminRepo = new AdminRepository()
     }
 
-    public getAdminByIdService = async (id: string) => {
-        // Repo : Find admin by id
-        return await this.adminRepo.findAdminByIdRepo(id)
-    }
+    // Repo : Find admin by id
+    public getAdminByIdService = async (id: string) => await this.adminRepo.findAdminByIdRepo(id)
 }

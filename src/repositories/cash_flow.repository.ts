@@ -81,9 +81,7 @@ export class CashFlowRepository {
         // Aggregate
         for (const cashFlow of cashFlows) {
             const key = cashFlow.created_at.toISOString().slice(0, 10)
-            map.set(
-                key, (map.get(key) ?? 0) + cashFlow.flow_amount
-            )
+            map.set(key, (map.get(key) ?? 0) + cashFlow.flow_amount)
         }
 
         const data: { context: string; total: number }[] = []
@@ -204,9 +202,7 @@ export class CashFlowRepository {
 
     public deleteCashFlowByIdRepo = async (id: string, created_by: string) => {
         return await prisma.cash_flow.delete({
-            where: { 
-                id, created_by
-            }
+            where: { id, created_by }
         })
     }
 }

@@ -18,7 +18,5 @@ export default class FamilyMemberRouter {
         this.route.get("/", verifyAuthToken, authorizeRole(["user"]), getAllFamilyMemberController)
     }
 
-    public getRouter = (): Router => {
-        return this.route
-    }
+    public getRouter = (): Router => this.route
 }

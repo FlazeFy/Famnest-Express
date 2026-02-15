@@ -66,10 +66,7 @@ export class FamilyMemberRepository {
         return prisma.family_member.findFirst({
             where: {
                 family: {
-                    id: familyOwnerId,
-                    meals: {
-                        some: {},
-                    },
+                    id: familyOwnerId, meals: { some: {} },
                 }
             },
             select: { user_id: true }

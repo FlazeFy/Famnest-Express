@@ -5,9 +5,7 @@ export class MealFeedbackRepository {
         const skip = (page - 1) * limit
         const where = { 
             meal_id: mealId,
-            meal: {
-                family_id: familyId
-            } 
+            meal: { family_id: familyId } 
         }
 
         const [data, total] = await Promise.all([
@@ -21,9 +19,7 @@ export class MealFeedbackRepository {
                         select: { username: true, fullname: true, id: true }
                     }
                 },
-                orderBy: {
-                    created_at: "desc",
-                }
+                orderBy: { created_at: "desc" }
             }),
             prisma.meal_feedback.count({where}),
         ])

@@ -21,7 +21,5 @@ export default class MealFeedbackRouter {
         this.route.get("/stats/last", verifyAuthToken, authorizeRole(["user"]), getLastMealFeedbackController)
     }
 
-    public getRouter = (): Router => {
-        return this.route
-    }
+    public getRouter = (): Router => this.route
 }

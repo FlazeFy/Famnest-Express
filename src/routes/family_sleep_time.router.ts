@@ -22,7 +22,5 @@ export default class FamilySleepTimeRouter {
         this.route.delete("/", verifyAuthToken, authorizeRole(["user"]), hardDeleteSleepTimeByIdController)
     }
 
-    public getRouter = (): Router => {
-        return this.route
-    }
+    public getRouter = (): Router => this.route
 }

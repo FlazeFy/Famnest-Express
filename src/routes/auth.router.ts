@@ -22,7 +22,5 @@ export default class AuthRouter {
         this.route.get("/profile", verifyAuthToken, authorizeRole(["admin","user"]), getMyProfile)
     }
 
-    public getRouter = (): Router => {
-        return this.route
-    }
+    public getRouter = (): Router => this.route
 }

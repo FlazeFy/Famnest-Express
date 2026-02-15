@@ -173,21 +173,13 @@ export class TaskRepository {
         return { data, total, average: Number((total / nDays).toFixed(2)) }
     } 
 
-    public deleteTaskByIdRepo = async (family_id: string, id: string) => {
-        return await prisma.task.delete({
-            where: { 
-                id, family_id
-            }
-        })
-    }
+    public deleteTaskByIdRepo = async (family_id: string, id: string) => await prisma.task.delete({ where: { id, family_id }})
 
     public findAllTaskExportRepo = async (familyId: string | null) => {
         const where = familyId ? { family_id: familyId } : {}
         return prisma.task.findMany({
             where,
-            orderBy: {
-                created_at: 'desc'
-            },
+            orderBy: { created_at: 'desc' },
             select: {
                 task_title: true, task_desc: true, status: true, start_date: true, due_date: true, tags: true, created_at: true,
                 user: {
@@ -196,9 +188,7 @@ export class TaskRepository {
                 task_assigns: {
                     select: {
                         assignee: {
-                            select: {
-                                username: true
-                            }
+                            select: { username: true }
                         }
                     }
                 }

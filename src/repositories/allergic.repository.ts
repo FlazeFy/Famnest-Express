@@ -11,9 +11,7 @@ export class AllergicRepository {
                 where: whereClause,
                 skip,
                 take: limit,
-                orderBy: {
-                    allergic_context: "asc",
-                }
+                orderBy: { allergic_context: "asc" }
             }),
             prisma.allergic.count(),
         ])
