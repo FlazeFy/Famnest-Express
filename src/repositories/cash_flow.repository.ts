@@ -200,6 +200,30 @@ export class CashFlowRepository {
         })
     }
 
+    public findRecentlyCashFlowRepo = async (familyId: string | null) => {
+        const where = familyId ? {
+            user: {
+                family_members: {
+                    some: {
+                        family_id: familyId
+                    }
+                }
+            }
+        } : {}
+            
+        return prisma.cash_flow.findMany({
+            where,
+            orderBy: { created_at: 'desc' },
+            take: 10,
+            select: {
+                flow_type: true, flow_context: true, flow_desc: true, flow_category: true, flow_amount: true, tags: true, created_at: true,
+                user: {
+                    select: { username: true }
+                }
+            }
+        })
+    }
+
     public deleteCashFlowByIdRepo = async (id: string, created_by: string) => {
         return await prisma.cash_flow.delete({
             where: { id, created_by }

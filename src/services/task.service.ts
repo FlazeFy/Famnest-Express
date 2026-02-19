@@ -23,7 +23,7 @@ export class TaskService {
         if (userId) {
             // Repo : Find family id by user id
             const family = await this.familyRepo.findFamilyByUserIdRepo(userId)
-            if (!family) return null
+            if (!family) throw { code: 404, message: 'Family not found' }
 
             familyId = family.id
         }
@@ -41,7 +41,7 @@ export class TaskService {
         if (userId) {
             // Repo : Find family id by user id
             const family = await this.familyRepo.findFamilyByUserIdRepo(userId)
-            if (!family) return null
+            if (!family) throw { code: 404, message: 'Family not found' }
 
             familyId = family.id
         }
@@ -56,7 +56,7 @@ export class TaskService {
         if (userId){
             // Repo : Find family id by user id
             const family = await this.familyRepo.findFamilyByUserIdRepo(userId)
-            if (!family) return null
+            if (!family) throw { code: 404, message: 'Family not found' }
 
             familyId = family.id
         }
@@ -79,7 +79,7 @@ export class TaskService {
     public hardDeleteTaskByIdService = async (userId: string, taskId: string) => {
         // Repo : Find family id by user id
         const family = await this.familyRepo.findFamilyByUserIdRepo(userId)
-        if (!family) return null
+        if (!family) throw { code: 404, message: 'Family not found' }
 
         // Repo : Delete task assign by task id
         await this.taskAssignRepo.deleteTaskAssignByTaskIdRepo(family.id, taskId)
@@ -97,7 +97,7 @@ export class TaskService {
     public exportAllTaskService = async (userId: string) => {
         // Repo : Find family id by user id
         const family = await this.familyRepo.findFamilyByUserIdRepo(userId)
-        if (!family) throw { code: 400, message: 'Family not found' }
+        if (!family) throw { code: 404, message: 'Family not found' }
 
         // Repo : Find all task
         const res = await this.taskRepo.findAllTaskExportRepo(family.id)

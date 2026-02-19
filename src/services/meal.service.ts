@@ -26,7 +26,7 @@ export class MealService {
     public getAllMealService = async (userId: string) => {
         // Repo : Find family id by user id
         const family = await this.familyRepo.findFamilyByUserIdRepo(userId)
-        if (!family) return null
+        if (!family) throw { code: 404, message: 'Family not found' }
 
         // Repo : Find all meal
         const res = await this.mealRepo.findAllMealByFamilyIdRepo(family.id)
@@ -52,7 +52,7 @@ export class MealService {
 
         // Repo : Find family id by user id
         const family = await this.familyRepo.findFamilyByUserIdRepo(userId)
-        if (!family) throw { code: 400, message: 'Family not found' }
+        if (!family) throw { code: 404, message: 'Family not found' }
         
         // Repo : Find meal by meal name and user id
         const isExist = await this.mealRepo.findMealByNameDayTimeFamilyIdRepo(meal_name, dayEnum, timeEnum, family.id)
@@ -87,7 +87,7 @@ export class MealService {
     public hardDeleteMealByIdService = async (userId: string, mealId: string) => {
         // Repo : Find family id by user id
         const family = await this.familyRepo.findFamilyByUserIdRepo(userId)
-        if (!family) return null
+        if (!family) throw { code: 404, message: 'Family not found' }
 
         // Repo : Delete meal prepare by by meal id
         await this.mealPrepareByRepo.deleteMealPrepareByByMealIdRepo(family.id, mealId)
@@ -104,7 +104,7 @@ export class MealService {
     public exportAllMealService = async (userId: string) => {
         // Repo : Find family id by user id
         const family = await this.familyRepo.findFamilyByUserIdRepo(userId)
-        if (!family) throw { code: 400, message: 'Family not found' }
+        if (!family) throw { code: 404, message: 'Family not found' }
 
         // Repo : Find all meal
         const res = await this.mealRepo.findAllMealExportRepo(family.id)

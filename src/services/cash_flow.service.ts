@@ -18,7 +18,7 @@ export class CashFlowService {
         if (userId) {
             // Repo : Find family id by user id
             const family = await this.familyRepo.findFamilyByUserIdRepo(userId)
-            if (!family) return null
+            if (!family) throw { code: 404, message: 'Family not found' }
 
             familyId = family.id
         }
@@ -36,7 +36,7 @@ export class CashFlowService {
         if (userId) {
             // Repo : Find family id by user id
             const family = await this.familyRepo.findFamilyByUserIdRepo(userId)
-            if (!family) return null
+            if (!family) throw { code: 404, message: 'Family not found' }
 
             familyId = family.id
         }
@@ -45,12 +45,34 @@ export class CashFlowService {
         return await this.cashFlowRepo.sumCashFlowLastWeekRepo(familyId, currentDate)
     }
 
+    public getRecentlyCashFlowService = async (userId: string | null) => {
+        let familyId: string | null =  null
+
+        if (userId) {
+            // Repo : Find family id by user id
+            const family = await this.familyRepo.findFamilyByUserIdRepo(userId)
+            if (!family) throw { code: 404, message: 'Family not found' }
+
+            familyId = family.id
+        }
+
+        // Repo : Find recently cash
+        const res = await this.cashFlowRepo.findRecentlyCashFlowRepo(familyId)
+        if (!res || res.length === 0) return null
+
+        // Repo : Find cash flow comparison by category
+        let summary = null
+        if (familyId) summary = await this.cashFlowRepo.sumCashFlowByCategoryRepo(familyId)
+    
+        return { res, summary }
+    }
+
     public getTotalCashFlowPerCategoryService = async (userId: string) => {
         let familyId: string 
 
         // Repo : Find family id by user id
         const family = await this.familyRepo.findFamilyByUserIdRepo(userId)
-        if (!family) return null
+        if (!family) throw { code: 404, message: 'Family not found' }
 
         familyId = family.id
 
