@@ -200,13 +200,48 @@ export class CashFlowRepository {
         })
     }
 
+    public findCashFlowContributionPerMemberByCategoryRepo = async (familyId: string, category: CashFlowCategory) => {
+        const grouped = await prisma.cash_flow.groupBy({
+            by: ['created_by'],
+            where: {
+                flow_category: category,
+                user: {
+                    family_members: {
+                        some: { family_id: familyId }
+                    }
+                }
+            },
+            _sum: { flow_amount: true }
+        })
+        if (!grouped.length) return null
+    
+        const users = await prisma.user.findMany({
+            where: {
+                id: { in: grouped.map(g => g.created_by) }
+            },
+            select: {
+                id: true,
+                username: true
+            }
+        })
+    
+        // Fetch and attach user profile to stats
+        return grouped.map(dt => {
+            const user = users.find(us => us.id === dt.created_by)
+    
+            return {
+                user_id: dt.created_by,
+                username: user?.username ?? 'Unknown',
+                total_amount: dt._sum.flow_amount ?? 0
+            }
+        })
+    }
+
     public findRecentlyCashFlowRepo = async (familyId: string | null) => {
         const where = familyId ? {
             user: {
                 family_members: {
-                    some: {
-                        family_id: familyId
-                    }
+                    some: { family_id: familyId }
                 }
             }
         } : {}

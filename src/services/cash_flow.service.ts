@@ -45,6 +45,18 @@ export class CashFlowService {
         return await this.cashFlowRepo.sumCashFlowLastWeekRepo(familyId, currentDate)
     }
 
+    public getCashFlowContributionPerMemberByCategoryService = async (userId: string, category: string) => {
+        const categoryEnum = CashFlowCategory[category as keyof typeof CashFlowCategory]
+        if (!categoryEnum) throw { code: 400, message: 'Invalid cash flow category' }
+
+        // Repo : Find family id by user id
+        const family = await this.familyRepo.findFamilyByUserIdRepo(userId)
+        if (!family) throw { code: 404, message: 'Family not found' }
+
+        // Repo : Get cash flow contributon per member 
+        return await this.cashFlowRepo.findCashFlowContributionPerMemberByCategoryRepo(family.id, categoryEnum)
+    }
+
     public getRecentlyCashFlowService = async (userId: string | null) => {
         let familyId: string | null =  null
 

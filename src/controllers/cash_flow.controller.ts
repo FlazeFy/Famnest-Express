@@ -108,6 +108,28 @@ export class CashFlowController {
         }
     }
 
+    public getCashFlowContributionPerMemberController = async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            // Param
+            const category = req.params.category as string
+
+            // Get user id
+            const { userId } = extractUserFromLocals(res)
+    
+            // Service : Get all cash flow
+            const result = await this.cashFlowService.getCashFlowContributionPerMemberByCategoryService(userId, category)
+            if (!result) throw { code: 404, message: "Cash flow not found" }
+    
+            // Success response
+            return res.status(200).json({
+                message: "Get cash flow successful",
+                data: result
+            })
+        } catch (error: any) {
+            next(error)
+        }
+    }
+
     public hardDeleteCashFlowByIdController = async (req: Request, res: Response, next: NextFunction) => {
         try {
             // Params
