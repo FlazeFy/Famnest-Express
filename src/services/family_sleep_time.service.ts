@@ -18,7 +18,7 @@ export class FamilySleepTimeService {
     public createFamilySleepTimeService = async (userId: string, hour_start: string, hour_end: string) => {
         // Repo : Find family id by user id
         const family = await this.familyRepo.findFamilyByUserIdRepo(userId)
-        if (!family) return null
+        if (!family) throw { code: 404, message: 'Family not found' }
 
         // Repo : Create family sleep time
         const res = await this.familySleepTimeRepo.createFamilySleepTimeRepo(userId, family.id, hour_start, hour_end)
@@ -54,7 +54,7 @@ export class FamilySleepTimeService {
     public hardDeleteFamilySleepTimeService = async (userId: string) => {
         // Repo : Find family id by user id
         const family = await this.familyRepo.findFamilyByUserIdRepo(userId)
-        if (!family) return null
+        if (!family) throw { code: 404, message: 'Family not found' }
 
         // Repo : Delete family sleep time
         return await this.familySleepTimeRepo.deleteFamilySleepTimeByFamilyIdRepo(family.id)

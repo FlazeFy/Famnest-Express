@@ -65,8 +65,7 @@ export class DictionaryController {
     
             // Success response
             return res.status(200).json({
-                message: "Delete dictionary successful",
-                data: result,
+                message: "Delete dictionary successful"
             })
         } catch (error: any) {
             next(error)

@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express"
 import { FamilySleepTimeService } from "../services/family_sleep_time.service"
 import { extractUserFromLocals } from "../utils/auth.util"
+import { isValidTime } from "../validators/template.validator"
 
 export class FamilySleepTimeController {
     private familySleepTimeService: FamilySleepTimeService
@@ -34,16 +35,18 @@ export class FamilySleepTimeController {
             const { hour_start, hour_end } = req.body
 
             // Get user id
-            const { userId, role } = extractUserFromLocals(res)
+            const { userId } = extractUserFromLocals(res)
+
+            // Validate hour and minute
+            if (!isValidTime(hour_start) || !isValidTime(hour_end)) throw { code: 422, message: "Time is not valid" }
     
             // Service : Create sleep time
             const result = await this.familySleepTimeService.createFamilySleepTimeService(userId, hour_start, hour_end)
             if (!result) throw { code: 500, message: "Something went wrong" }
-    
+
             // Success response
             return res.status(201).json({
-                message: "Sleep time created",
-                data: result
+                message: `Sleep time created, start from ${result.hour_start} until ${result.hour_end}`
             })
         } catch (error: any) {
             next(error)

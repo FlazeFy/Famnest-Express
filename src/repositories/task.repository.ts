@@ -79,7 +79,7 @@ export class TaskRepository {
     public findIncomingTaskRepo = async (page: number, limit: number, familyId: string | null, currentDate: string) => {
         const skip = (page - 1) * limit
         const baseDate = new Date(currentDate)
-        const hour = 24
+        const hour = 48
         const nHour = new Date(baseDate.getTime() + hour * 60 * 60 * 1000)
       
         const whereClause: any = {

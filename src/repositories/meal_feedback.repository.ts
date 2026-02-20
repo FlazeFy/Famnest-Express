@@ -86,5 +86,10 @@ export class MealFeedbackRepository {
         return Object.values(mealsMap)
     }
     
+    public deleteMealFeedbackByMealIdRepo = async (family_id: string, meal_id: string) => {
+        return await prisma.meal_feedback.deleteMany({
+            where: { meal_id, meal: { family_id }}
+        })
+    }  
 }
   

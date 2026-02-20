@@ -2,6 +2,7 @@ import { DayName, MealTime } from "../generated/prisma/enums"
 import { FamilyRepository } from "../repositories/family.repository"
 import { FamilyMemberRepository } from "../repositories/family_member.repository"
 import { MealRepository } from "../repositories/meal.repository"
+import { MealFeedbackRepository } from "../repositories/meal_feedback.repository"
 import { MealPrepareByRepository } from "../repositories/meal_prepare_by.repository"
 import { MultiRepository } from "../repositories/multi.repository"
 import { announcementEmailTemplate } from "../templates/announcement.template"
@@ -14,6 +15,7 @@ export class MealService {
     private mealPrepareByRepo: MealPrepareByRepository
     private familyRepo: FamilyRepository
     private familyMemberRepo: FamilyMemberRepository
+    private mealFeedbackRepo: MealFeedbackRepository
 
     constructor(){
         this.multiRepo = new MultiRepository()
@@ -21,6 +23,7 @@ export class MealService {
         this.familyRepo = new FamilyRepository()
         this.mealPrepareByRepo = new MealPrepareByRepository()
         this.familyMemberRepo = new FamilyMemberRepository()
+        this.mealFeedbackRepo = new MealFeedbackRepository()
     }
 
     public getAllMealService = async (userId: string) => {
@@ -77,8 +80,10 @@ export class MealService {
         const meal = await this.mealRepo.createMealRepo(meal_name, meal_desc, dayEnum, timeEnum, family.id, userId)
 
         // Repo : Create meal prepare by
-        for (const dt of meal_prepare_by) {
-            await this.mealPrepareByRepo.createMealPrepareByRepo(meal.id, dt, userId)
+        if (meal_prepare_by && meal_prepare_by.length > 0) {
+            for (const dt of meal_prepare_by) {
+                await this.mealPrepareByRepo.createMealPrepareByRepo(meal.id, dt, userId)
+            }
         }
 
         return meal
@@ -88,6 +93,9 @@ export class MealService {
         // Repo : Find family id by user id
         const family = await this.familyRepo.findFamilyByUserIdRepo(userId)
         if (!family) throw { code: 404, message: 'Family not found' }
+
+        // Repo : Delete meal feedback by meal id
+        await this.mealFeedbackRepo.deleteMealFeedbackByMealIdRepo(family.id, mealId)
 
         // Repo : Delete meal prepare by by meal id
         await this.mealPrepareByRepo.deleteMealPrepareByByMealIdRepo(family.id, mealId)
