@@ -231,8 +231,8 @@ export class CashFlowRepository {
     
             return {
                 user_id: dt.created_by,
-                username: user?.username ?? 'Unknown',
-                total_amount: dt._sum.flow_amount ?? 0
+                context: user?.username ?? 'Unknown',
+                total: dt._sum.flow_amount ?? 0
             }
         })
     }
