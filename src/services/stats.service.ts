@@ -5,6 +5,7 @@ import { FamilyMemberRepository } from "../repositories/family_member.repository
 import { FamilySleepTimeRepository } from "../repositories/family_sleep_time.repository"
 import { MealRepository } from "../repositories/meal.repository"
 import { ScheduleRepository } from "../repositories/schedule.repository"
+import { TaskAssignRepository } from "../repositories/task_assign.repository"
 
 export class StatsService {
     private familyRepo: FamilyRepository
@@ -14,6 +15,7 @@ export class StatsService {
     private familySleepTimeRepo: FamilySleepTimeRepository
     private cashFlowRepo: CashFlowRepository
     private eventRepo: EventRepository
+    private taskAssignRepo: TaskAssignRepository
 
     constructor(){
         this.familyRepo = new FamilyRepository()
@@ -23,6 +25,7 @@ export class StatsService {
         this.familySleepTimeRepo = new FamilySleepTimeRepository()
         this.cashFlowRepo = new CashFlowRepository()
         this.eventRepo = new EventRepository()
+        this.taskAssignRepo = new TaskAssignRepository
     }
 
     public getFamilyDashboardService = async (userId: string, now: Date) => {
@@ -49,6 +52,9 @@ export class StatsService {
 
         // Repo : Find next event
         res['next_event'] = await this.eventRepo.findNearestEventRepo(family.id, now)
+
+        // Repo : Find task progress
+        res['task_progress'] = await this.taskAssignRepo.findTaskProgressPerMember(family.id)
 
         return res
     }
