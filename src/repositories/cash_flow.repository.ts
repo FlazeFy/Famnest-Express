@@ -259,6 +259,32 @@ export class CashFlowRepository {
         })
     }
 
+    public countFamilyAsset = async (familyId: string) => {
+        const cashFlows = await prisma.cash_flow.groupBy({
+            by: ['flow_category'],
+            _sum: {
+                flow_amount: true
+            },
+            where: {
+                user: {
+                    family_members: {
+                        some: { family_id: familyId }
+                    }
+                }
+            }
+        })
+
+        let income: number = 0
+        let spending: number = 0
+
+        cashFlows.forEach(dt => {
+            if (dt.flow_category === "income") income = dt._sum.flow_amount ?? 0
+            if (dt.flow_category === "spending") spending = dt._sum.flow_amount ?? 0
+        })
+
+        return { income, spending, total_assets: income - spending }
+    }
+
     public deleteCashFlowByIdRepo = async (id: string, created_by: string) => {
         return await prisma.cash_flow.delete({
             where: { id, created_by }
