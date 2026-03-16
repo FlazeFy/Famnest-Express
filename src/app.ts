@@ -2,6 +2,8 @@ import dotenv from "dotenv"
 dotenv.config()
 import express, { Application, NextFunction, Request, Response } from "express"
 import cors from "cors"
+import swaggerUi from "swagger-ui-express"
+import { swaggerSpec } from "./configs/swagger"
 import DictionaryRouter from "./routes/dictionary.router"
 import AuthRouter from "./routes/auth.router"
 import AllergicRouter from "./routes/allergic.router"
@@ -34,6 +36,9 @@ class App {
     private configure = () => {
         this.app.use(cors())
         this.app.use(express.json())
+
+        // Swagger
+        this.app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec))
     }
 
     // Route configuration
