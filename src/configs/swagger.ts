@@ -14,6 +14,16 @@ const options = {
                 url: "http://localhost:3000",
             },
         ],
+        paths: {},
+        components: {
+            securitySchemes: {
+                bearerAuth: {
+                    type: "http",
+                    scheme: "bearer",
+                    bearerFormat: "JWT",
+                },
+            },
+        },
     } as OpenAPIV3.Document,
     apis: ["./src/routes/**/*.ts"],
 }
