@@ -36,26 +36,18 @@ export default class FeedbackRouter {
          *             schema:
          *               type: object
          *               properties:
-         *                 message:
-         *                   type: string
-         *                   example: Get feedback successful
+         *                 message: { type: string, example: Get feedback successful }
          *                 data:
          *                   type: array
          *                   items:
          *                     type: object
          *                     properties:
-         *                       feedback_body:
-         *                         type: string
-         *                         example: Bibo spoliatio trepide trado aer nulla delinquo audentia cuius quisquam.
-         *                       feedback_rate:
-         *                         type: integer
-         *                         example: 4
+         *                       feedback_body: { type: string, example: Bibo spoliatio trepide trado aer nulla delinquo audentia cuius quisquam. }
+         *                       feedback_rate: { type: integer, example: 4 }
          *                       user:
          *                         type: object
          *                         properties:
-         *                           username:
-         *                             type: string
-         *                             example: flazefy
+         *                           username: { type: string, example: flazefy }
          */
         this.route.get("/random", getRandomFeedbackController)
     }
