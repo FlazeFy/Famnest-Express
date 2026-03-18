@@ -25,7 +25,7 @@ const options = {
             },
         },
     } as OpenAPIV3.Document,
-    apis: ["./src/routes/**/*.ts"],
+    apis: ["./src/docs/**/*.ts"],
 }
 
 export const swaggerSpec = swaggerJsdoc(options)
