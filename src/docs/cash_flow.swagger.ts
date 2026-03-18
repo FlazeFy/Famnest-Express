@@ -145,3 +145,104 @@
  *                       context: { type: string, example: Osbaldo_Larson13 }
  *                       total: { type: number, example: 1100000 }
  */
+
+/**
+ * @openapi
+ * /api/v1/cash_flows/total:
+ *   get:
+ *     summary: Get total cash flow by date range
+ *     tags: [Cash Flow]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: current_date
+ *         required: true
+ *         schema: { type: string, format: date, example: 2025-06-27 }
+ *         description: Current date to calculate last 7 days cash flow
+ *     responses:
+ *       200:
+ *         description: Get cash flow successful
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message: { type: string, example: Get cash flow successful }
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       context: { type: string, example: 27 Jun 25 }
+ *                       total: { type: number, example: 0 }
+ *                 total: { type: number, example: 0 }
+ *                 average: { type: number, example: 0 }
+ */
+
+/**
+ * @openapi
+ * /api/v1/cash_flows/chart:
+ *   get:
+ *     summary: Get cash flow chart data
+ *     tags: [Cash Flow]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Get cash flow successful
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message: { type: string, example: Get cash flow successful }
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     spending:
+ *                       type: object
+ *                       properties:
+ *                         categories:
+ *                           type: array
+ *                           items:
+ *                             type: string
+ *                             example: Thu
+ *                         series:
+ *                           type: array
+ *                           items:
+ *                             type: object
+ *                             properties:
+ *                               name: { type: string, example: Bridget Breitenberg }
+ *                               data:
+ *                                 type: array
+ *                                 items:
+ *                                   type: number
+ *                                   example: 435000
+ *                     income:
+ *                       type: object
+ *                       properties:
+ *                         categories:
+ *                           type: array
+ *                           items:
+ *                             type: string
+ *                             example: Sep
+ *                         series:
+ *                           type: array
+ *                           items:
+ *                             type: object
+ *                             properties:
+ *                               name: { type: string, example: Ann Rogahn }
+ *                               data:
+ *                                 type: array
+ *                                 items:
+ *                                   type: number
+ *                                   example: 945000
+ *                     comparison:
+ *                       type: array
+ *                       items:
+ *                         type: object
+ *                         properties:
+ *                           context: { type: string, enum: [income, spending], example: income }
+ *                           total: { type: number, example: 4230000 }
+ */
