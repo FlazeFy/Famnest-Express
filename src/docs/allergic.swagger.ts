@@ -34,3 +34,60 @@
  *                     total: { type: integer, example: 151 }
  *                     total_page: { type: integer, example: 11 }
  */
+
+/**
+ * @openapi
+ * /api/v1/allergics:
+ *   post:
+ *     summary: Create allergic
+ *     tags: [Allergic]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [allergic_context, allergic_desc]
+ *             properties:
+ *               allergic_context: { type: string, example: lorem }
+ *               allergic_desc: { type: string, example: test }
+ *     responses:
+ *       201:
+ *         description: Allergic created
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message: { type: string, example: Allergic created }
+ *       409:
+ *         description: Allergic is already exist
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message: { type: string, example: Allergic is already exist }
+ *       422:
+ *         description: Validation error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message: { type: string, example: Validation error }
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     allergic_context: { type: string, example: allergic_context must be less than or equal to 36 }
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message: { type: string, example: Something went wrong }
+ */
